@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 
 #include <errno.h>
 
@@ -179,6 +180,7 @@ static GSourceFuncs socket_source_funcs = {
 
 /* Not included in ldap.h but documented */
 int ldap_init_fd (ber_socket_t fd, int proto, LDAP_CONST char *url, struct ldap **ldp);
+#define LDAP_SOCKET_TIMEOUT 5
 
 GSource *
 realm_ldap_connect_anonymous (GSocketAddress *address,
@@ -202,6 +204,8 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 	int opt_rc;
 	int ldap_opt_val;
 	const char *errmsg = NULL;
+	struct timeval tv = {LDAP_SOCKET_TIMEOUT, 0};
+	unsigned int milli = LDAP_SOCKET_TIMEOUT * 1000;
 
 	g_return_val_if_fail (G_IS_INET_SOCKET_ADDRESS (address), NULL);
 
@@ -243,6 +247,23 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 
 		if (!g_unix_set_fd_nonblocking (ls->sock, FALSE, NULL))
 			g_warning ("couldn't set to blocking");
+
+		/* Lower the kernel defaults which might be minutes to hours */
+		rc = setsockopt (ls->sock, SOL_SOCKET, SO_RCVTIMEO,
+		                 &tv, sizeof (tv));
+		if (rc != 0) {
+			g_warning ("couldn't set SO_RCVTIMEO");
+		}
+		rc = setsockopt (ls->sock, SOL_SOCKET, SO_SNDTIMEO,
+		                 &tv, sizeof (tv));
+		if (rc != 0) {
+			g_warning ("couldn't set SO_SNDTIMEO");
+		}
+		rc = setsockopt (ls->sock, IPPROTO_TCP, TCP_USER_TIMEOUT,
+		                 &milli, sizeof (milli));
+		if (rc != 0) {
+			g_warning ("couldn't set TCP_USER_TIMEOUT");
+		}
 
 		if (family == G_SOCKET_FAMILY_IPV4) {
 			url = g_strdup_printf ("%s://%s:%d",
