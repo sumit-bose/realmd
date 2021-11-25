@@ -55,12 +55,20 @@ log_syslog_and_debug (GDBusMethodInvocation *invocation,
 	while ((ptr = memchr (at, '\n', length)) != NULL) {
 		*ptr = '\0';
 		if (line_buffer && line_buffer->len > 0) {
+#ifdef WITH_JOURNAL
+			/* Call realm_daemon_syslog directly to add
+			 * REALMD_OPERATION to the jounrnal */
 			realm_daemon_syslog (operation, log_level, "%s%s", line_buffer->str, at);
+#else
 			g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "%s%s", line_buffer->str, at);
+#endif
 			g_string_set_size (line_buffer, 0);
 		} else {
+#ifdef WITH_JOURNAL
 			realm_daemon_syslog (operation, log_level, "%s", at);
+#else
 			g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "%s", at);
+#endif
 		}
 
 		*ptr = '\n';
