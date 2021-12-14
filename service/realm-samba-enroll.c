@@ -37,6 +37,14 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#ifdef WITH_NEW_SAMBA_CLI_OPTS
+#define SMBCLI_KERBEROS "--use-kerberos=required"
+#define SMBCLI_CONF "--configfile"
+#else
+#define SMBCLI_KERBEROS "-k"
+#define SMBCLI_CONF "-s"
+#endif
+
 typedef struct {
 	GDBusMethodInvocation *invocation;
 	gchar *join_args[8];
@@ -260,7 +268,7 @@ begin_net_process (JoinClosure *join,
 	/* Use our custom smb.conf */
 	g_ptr_array_add (args, (gpointer)realm_settings_path ("net"));
 	if (join->custom_smb_conf) {
-		g_ptr_array_add (args, "-s");
+		g_ptr_array_add (args, SMBCLI_CONF);
 		g_ptr_array_add (args, join->custom_smb_conf);
 	}
 
@@ -370,7 +378,7 @@ on_join_do_keytab (GObject *source,
 	} else {
 		begin_net_process (join, NULL,
 		                   on_keytab_do_finish, g_object_ref (task),
-		                   "-k", "ads", "keytab", "create", NULL);
+		                   SMBCLI_KERBEROS, "ads", "keytab", "create", NULL);
 	}
 
 	g_object_unref (task);
@@ -428,7 +436,7 @@ begin_join (GTask *task,
 		begin_net_process (join, join->password_input,
 		                   on_join_do_keytab, g_object_ref (task),
 		                   "-U", join->user_name,
-		                   "-k", "ads", "join", join->disco->domain_name,
+		                   SMBCLI_KERBEROS, "ads", "join", join->disco->domain_name,
 		                   join->join_args[0], join->join_args[1],
 		                   join->join_args[2], join->join_args[3],
 		                   join->join_args[4], NULL);
@@ -437,7 +445,7 @@ begin_join (GTask *task,
 	} else {
 		begin_net_process (join, NULL,
 		                   on_join_do_keytab, g_object_ref (task),
-		                   "-k", "ads", "join", join->disco->domain_name,
+		                   SMBCLI_KERBEROS, "ads", "join", join->disco->domain_name,
 		                   join->join_args[0], join->join_args[1],
 		                   join->join_args[2], join->join_args[3],
 		                   join->join_args[4], NULL);
@@ -543,7 +551,7 @@ realm_samba_enroll_leave_async (RealmDisco *disco,
 		join->envvar = g_strdup_printf ("KRB5CCNAME=%s", cred->x.ccache.file);
 		begin_net_process (join, NULL,
 		                   on_leave_complete, g_object_ref (task),
-		                   "-k", "ads", "leave", NULL);
+		                   SMBCLI_KERBEROS, "ads", "leave", NULL);
 		break;
 	default:
 		g_return_if_reached ();

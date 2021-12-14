@@ -228,6 +228,40 @@ AC_SUBST(LDAP_LIBS)
 AC_SUBST(LDAP_CFLAGS)
 
 # -------------------------------------------------------------------
+# Samba
+
+AC_ARG_WITH(new-samba-cli-options,
+	AS_HELP_STRING([--with-new-samba-cli-options=yes/no],
+	               [Use new command line options introduced with Samba-4.15,
+	                if not provided the output of 'net help' is checked or old
+	                style options are used]))
+
+if test "$with_new_samba_cli_options" = "no"; then
+	AC_MSG_RESULT([Using old Samba command line options])
+elif test "$with_new_samba_cli_options" = "yes"; then
+	AC_DEFINE_UNQUOTED(WITH_NEW_SAMBA_CLI_OPTS, 1,
+	                   [Use new command line options introduced with Samba-4.15])
+	AC_MSG_RESULT([Using new Samba command line options])
+else
+	AC_PATH_PROG([SAMBA_NET], [net])
+	if test ! -x "$SAMBA_NET"; then
+		AC_MSG_NOTICE([Could not find Samba's net utility, ]
+		              [assuming old style command line options, ]
+		              [please install the net utility for proper detection.])
+	else
+		AC_MSG_CHECKING([for --debug-stdout option of net])
+		if AC_RUN_LOG([$SAMBA_NET help 2>&1 |grep -- '--debug-stdout' > /dev/null]); then
+			AC_DEFINE_UNQUOTED(WITH_NEW_SAMBA_CLI_OPTS, 1,
+			                   [Use new command line options introduced with Samba-4.15])
+			AC_MSG_RESULT([yes])
+		else
+			AC_MSG_RESULT([no])
+		fi
+	fi
+fi
+
+
+# -------------------------------------------------------------------
 # Directories
 
 DBUS_SERVICES_DIR="${datadir}/dbus-1/system-services"
