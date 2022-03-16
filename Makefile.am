@@ -2,7 +2,7 @@ NULL =
 
 ACLOCAL_AMFLAGS = -I build/m4 ${ACLOCAL_FLAGS}
 
-SUBDIRS = po
+SUBDIRS = . po
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-debug=yes \
@@ -54,18 +54,13 @@ SED_SUBST = sed \
 	-e 's,[@]VERSION[@],$(VERSION),g' \
 	$(NULL)
 
-.desktop.in.in.desktop.in:
-	$(V_SED) $(MKDIR_P) $(dir $@) && $(SED_SUBST) $< > $@
-
-@INTLTOOL_DESKTOP_RULE@
-
 .service.in.service:
 	$(V_SED) $(MKDIR_P) $(dir $@) && $(SED_SUBST) $< > $@
 
 .conf.in.conf:
 	$(V_SED) $(MKDIR_P) $(dir $@) && $(SED_SUBST) $< > $@
 
-SUFFIXES = .conf .conf.in .desktop.in .desktop.in.in .service .service.in
+SUFFIXES = .conf .conf.in .service .service.in
 
 BUILT_SOURCES =
 DISTCLEANFILES =

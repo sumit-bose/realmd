@@ -11,8 +11,6 @@ GLIB_REQ=2.36.0
 GLIB_MIN=GLIB_VERSION_2_36
 GLIB_MAX=GLIB_VERSION_2_36
 
-INTLTOOL_REQ=0.35.0
-
 # -----------------------------------------------------------------------------
 
 AC_CONFIG_MACRO_DIR([build/m4])
@@ -77,13 +75,14 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
-IT_PROG_INTLTOOL($INTLTOOL_REQ)
 PKG_PROG_PKG_CONFIG
+
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.19.8])
 
 GETTEXT_PACKAGE=realmd
 AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[The gettext domain name])
-AM_GLIB_GNU_GETTEXT
 
 # --------------------------------------------------------------------
 # GLib

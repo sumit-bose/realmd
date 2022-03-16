@@ -13,7 +13,7 @@ packages where relevant:</p>
 <li>Kerberos libraries</li>
 <li>PolicyKit GObject library</li>
 <li>libxslt tools</li>
-<li>Intltool</li>
+<li>gettext</li>
 </ul>
 
 <p>In addition if you're building from git, you'll need to have the various
@@ -22,7 +22,7 @@ tools like Autoconf, Automake, GCC, git and so on.</p>
 <p>On <b>Debian</b> or <b>Ubuntu</b> you can use the following command to
 install the dependencies:</p>
 
-<pre>$ sudo apt-get install build-essential autoconf automake intltool \
+<pre>$ sudo apt-get install build-essential autoconf automake gettext \
          xmlto xsltproc libglib2.0-dev libpackagekit-glib2-dev \
          libpolkit-gobject-1-dev libkrb5-dev libldap2-dev libsasl2-dev</pre>
 
@@ -30,7 +30,7 @@ install the dependencies:</p>
 dependencies:</p>
 
 <pre>$ sudo yum groupinstall "Development Tools"
-$ sudo yum install automake autoconf intltool xmlto xsltproc glib-devel \
+$ sudo yum install automake autoconf gettext xmlto xsltproc glib-devel \
     polkit-devel krb5-devel openldap-devel \
     cyrus-sasl-devel systemd-devel</pre>
 

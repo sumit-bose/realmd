@@ -15,10 +15,7 @@ polkit_policydir = $(POLKIT_ACTION_DIR)
 polkit_policy_in_files = service/org.freedesktop.realmd.policy.in
 polkit_policy_DATA = $(polkit_policy_in_files:.policy.in=.policy)
 service/%.policy: service/%.policy.in
-	$(INTLTOOL_V_MERGE) mkdir -p $(builddir)/service && \
-		LC_ALL=C $(INTLTOOL_MERGE) $(INTLTOOL_V_MERGE_OPTIONS) -x -u \
-			-c $(builddir)/po/.intltool-merge-cache \
-			$(srcdir)/po $< $@
+	$(AM_V_GEN)$(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 realmd_SOURCES = \
 	service/realm-adcli-enroll.c \

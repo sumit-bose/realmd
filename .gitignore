@@ -9,11 +9,11 @@
 
 .cproject
 .deps
-.intltool-merge-cache
 .project
 .pydevproject
 .tx
 
+ABOUT-NLS
 aclocal.m4
 autom4te.cache
 clang_*
@@ -39,6 +39,8 @@ temp.txt
 /gtk-doc.make
 /realmd-*.*
 
+/build/config.sub
+/build/config.rpath
 /build/coverage.info
 /build/coverage
 /build/test-driver
@@ -68,7 +70,15 @@ temp.txt
 /doc/manual/*.5
 /doc/website/html
 
+/po/Makevars.template
+/po/Rules-quot
+/po/boldquot.sed
+/po/en@boldquot.header
+/po/en@quot.header
+/po/insert-header.sin
+/po/quot.sed
 /po/realmd.pot
+/po/remove-potcdate.sin
 /po/*.gmo
 
 /service/identity-config-service

@@ -11,8 +11,8 @@
 
 	<!-- Any user can discover realms -->
 	<action id="org.freedesktop.realmd.discover-realm">
-		<_description>Discover realm</_description>
-		<_message>Authentication is required to discover a kerberos realm</_message>
+		<description>Discover realm</description>
+		<message>Authentication is required to discover a kerberos realm</message>
 		<defaults>
 			<allow_any>yes</allow_any>
 			<allow_inactive>yes</allow_inactive>
@@ -21,8 +21,8 @@
 	</action>
 
 	<action id="org.freedesktop.realmd.configure-realm">
-		<_description>Join machine to realm</_description>
-		<_message>Authentication is required to join this machine to a realm or domain</_message>
+		<description>Join machine to realm</description>
+		<message>Authentication is required to join this machine to a realm or domain</message>
 		<defaults>
 			<allow_any>auth_admin</allow_any>
 			<allow_inactive>auth_admin</allow_inactive>
@@ -35,8 +35,8 @@
 	</action>
 
 	<action id="org.freedesktop.realmd.deconfigure-realm">
-		<_description>Remove machine from realm</_description>
-		<_message>Authentication is required to remove this computer from a realm or domain.</_message>
+		<description>Remove machine from realm</description>
+		<message>Authentication is required to remove this computer from a realm or domain.</message>
 		<defaults>
 			<allow_any>auth_admin</allow_any>
 			<allow_inactive>auth_admin</allow_inactive>
@@ -45,8 +45,8 @@
 	</action>
 
 	<action id="org.freedesktop.realmd.login-policy">
-		<_description>Change login policy</_description>
-		<_message>Authentication is required to change the policy of who can log in on this computer.</_message>
+		<description>Change login policy</description>
+		<message>Authentication is required to change the policy of who can log in on this computer.</message>
 		<defaults>
 			<allow_any>auth_admin</allow_any>
 			<allow_inactive>auth_admin</allow_inactive>
