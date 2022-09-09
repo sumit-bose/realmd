@@ -31,6 +31,7 @@
 #include "realm-samba-enroll.h"
 #include "realm-samba-winbind.h"
 #include "realm-settings.h"
+#include "realm-service.h"
 
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
@@ -158,6 +159,22 @@ enroll_closure_free (gpointer data)
 }
 
 static void
+on_winbind_restarted (GObject *source,
+                      GAsyncResult *result,
+                      gpointer user_data)
+{
+	GTask *task = G_TASK (user_data);
+	GError *error = NULL;
+
+	realm_service_restart_finish (result, &error);
+	if (error != NULL)
+		g_task_return_error (task, error);
+	else
+		g_task_return_boolean (task, TRUE);
+	g_object_unref (task);
+}
+
+static void
 on_winbind_done (GObject *source,
                  GAsyncResult *result,
                  gpointer user_data)
@@ -192,7 +209,7 @@ on_join_do_winbind (GObject *source,
 
 
 	realm_samba_enroll_join_finish (result, &error);
-	if (error == NULL) {
+	if (error == NULL && !realm_option_do_not_touch_config (enroll->options)) {
 		realm_ini_config_change (self->config, REALM_SAMBA_CONFIG_GLOBAL, &error,
 		                         "security", "ads",
 		                         "realm", enroll->disco->kerberos_realm,
@@ -205,13 +222,14 @@ on_join_do_winbind (GObject *source,
 		                         NULL);
 	}
 
-	if (error == NULL && enroll->disco->dns_fqdn != NULL) {
+	if (error == NULL && enroll->disco->dns_fqdn != NULL
+	                && !realm_option_do_not_touch_config (enroll->options)) {
 		realm_ini_config_change (self->config, REALM_SAMBA_CONFIG_GLOBAL, &error,
 		                         "additional dns hostnames", enroll->disco->dns_fqdn,
 		                         NULL);
 	}
 
-	if (error == NULL) {
+	if (error == NULL && !realm_option_do_not_touch_config (enroll->options)) {
 		configure_krb5_conf_for_domain (enroll->disco->kerberos_realm, &error);
 		if (error != NULL) {
 			realm_diagnostics_error (enroll->invocation, error,
@@ -223,10 +241,15 @@ on_join_do_winbind (GObject *source,
 	}
 
 	if (error == NULL) {
-		name = realm_kerberos_get_name (REALM_KERBEROS (self));
-		realm_samba_winbind_configure_async (self->config, name, enroll->options,
-		                                     enroll->invocation,
-		                                     on_winbind_done, g_object_ref (task));
+		if (!realm_option_do_not_touch_config (enroll->options)) {
+			name = realm_kerberos_get_name (REALM_KERBEROS (self));
+			realm_samba_winbind_configure_async (self->config, name, enroll->options,
+							     enroll->invocation,
+							     on_winbind_done, g_object_ref (task));
+		} else {
+			realm_service_restart ("winbind", enroll->invocation,
+			                       on_winbind_restarted, g_object_ref (task));
+		}
 	} else {
 		g_task_return_error (task, error);
 	}
@@ -306,7 +329,7 @@ realm_samba_join_async (RealmKerberosMembership *membership,
 
 	/* Make sure not already enrolled in a realm */
 	enrolled = lookup_enrolled_realm (self);
-	if (enrolled != NULL) {
+	if (enrolled != NULL && !realm_option_do_not_touch_config (enroll->options)) {
 		g_task_return_new_error (task, REALM_ERROR, REALM_ERROR_ALREADY_CONFIGURED,
 		                         _("Already joined to a domain"));
 

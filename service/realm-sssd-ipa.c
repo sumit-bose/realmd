@@ -293,6 +293,10 @@ realm_sssd_ipa_join_async (RealmKerberosMembership *membership,
 		g_task_return_new_error (task, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
 		                         _("The computer-ou argument is not supported when joining an IPA domain."));
 
+	} else if (realm_option_do_not_touch_config (options)) {
+		g_task_return_new_error (task, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+		                         _("The do-not-touch-config option is not supported when joining an IPA domain."));
+
 	} else if (g_variant_lookup (options, REALM_DBUS_OPTION_MEMBERSHIP_SOFTWARE, "&s", &software) &&
 	           !g_str_equal (software, REALM_DBUS_IDENTIFIER_FREEIPA) &&
 	           !g_str_equal (software, REALM_DBUS_IDENTIFIER_IPA)) {

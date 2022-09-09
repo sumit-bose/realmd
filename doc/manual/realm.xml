@@ -325,6 +325,29 @@ $ realm join --user=admin --computer-ou=OU=Special domain.example.com
 			<command>realmd</command> when a new way is available.
 			</para></listitem>
 		</varlistentry>
+		<varlistentry>
+			<term><option>--do-not-touch-config</option></term>
+			<listitem><para>Run the join operation but do not touch
+			the local configuration of the client except adding new
+			Kerberos keys to the keytab. The purpose of this option
+			is to synchronize the keytab entries with the ones
+			stored in AD or recreate the computer object in AD
+			without changing the local configuration which might
+			contain changes which would get overwritten by a fully
+			leave/join cycle.</para>
+
+			<para>If running <command>realm join</command> with this
+			options does not help to fix issues it is recommended to
+			call <command>realm leave</command> followed by
+			<command>realm join</command> to enforce a fresh
+			configuration with default settings. Since this might
+			overwrite manual changes to the related configuration
+			files it is recommend to save those change before running
+			the commands.</para>
+			<para>This options is only available when joining AD
+			domains.</para>
+			</listitem>
+		</varlistentry>
 	</variablelist>
 
 </refsect1>

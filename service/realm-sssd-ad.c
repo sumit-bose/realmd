@@ -145,8 +145,12 @@ on_sssd_enable_nss (GObject *source,
 	realm_service_enable_and_restart_finish (result, &error);
 
 	if (error == NULL) {
-		realm_command_run_known_async ("sssd-enable-logins", NULL, join->invocation,
-		                               on_enable_nss_done, g_object_ref (task));
+		if (!realm_option_do_not_touch_config (join->options)) {
+			realm_command_run_known_async ("sssd-enable-logins", NULL, join->invocation,
+			                               on_enable_nss_done, g_object_ref (task));
+		} else {
+			g_task_return_boolean (task, TRUE);
+		}
 
 	} else {
 		g_task_return_error (task, error);
@@ -231,6 +235,22 @@ configure_sssd_for_domain (RealmIniConfig *config,
 }
 
 static void
+on_sssd_restarted (GObject *source,
+                     GAsyncResult *result,
+                     gpointer user_data)
+{
+	GTask *task = G_TASK (user_data);
+	GError *error = NULL;
+
+	realm_service_restart_finish (result, &error);
+	if (error != NULL)
+		g_task_return_error (task, error);
+	else
+		g_task_return_boolean (task, TRUE);
+	g_object_unref (task);
+}
+
+static void
 on_join_do_sssd (GObject *source,
                  GAsyncResult *result,
                  gpointer user_data)
@@ -253,12 +273,12 @@ on_join_do_sssd (GObject *source,
 		realm_samba_enroll_join_finish (result, &error);
 	}
 
-	if (error == NULL) {
+	if (error == NULL && !realm_option_do_not_touch_config (join->options)) {
 		configure_sssd_for_domain (realm_sssd_get_config (sssd), join->disco,
 		                           join->options, join->use_adcli, &error);
 	}
 
-	if (error == NULL) {
+	if (error == NULL && !realm_option_do_not_touch_config (join->options)) {
 		configure_krb5_conf_for_domain (join->disco->kerberos_realm, &error);
 		if (error != NULL) {
 			realm_diagnostics_error (join->invocation, error,
@@ -270,9 +290,13 @@ on_join_do_sssd (GObject *source,
 	}
 
 	if (error == NULL) {
-		realm_service_enable_and_restart ("sssd", join->invocation,
-		                                  on_sssd_enable_nss, g_object_ref (task));
-
+		if (!realm_option_do_not_touch_config (join->options)) {
+			realm_service_enable_and_restart ("sssd", join->invocation,
+			                                  on_sssd_enable_nss, g_object_ref (task));
+		} else {
+			realm_service_restart ("sssd", join->invocation,
+			                       on_sssd_restarted, g_object_ref (task));
+		}
 	} else {
 		g_task_return_error (task, error);
 	}
@@ -427,11 +451,14 @@ realm_sssd_ad_join_async (RealmKerberosMembership *membership,
 	g_task_set_task_data (task, join, join_closure_free);
 
 	/* Make sure not already enrolled in a realm */
-	if (realm_sssd_get_config_section (sssd) != NULL) {
+	if (!realm_option_do_not_touch_config (options)
+	                && realm_sssd_get_config_section (sssd) != NULL) {
 		g_task_return_new_error (task, REALM_ERROR, REALM_ERROR_ALREADY_CONFIGURED,
 		                         _("Already joined to this domain"));
 
-	} else if (realm_sssd_config_have_domain (realm_sssd_get_config (sssd), realm_kerberos_get_realm_name (realm))) {
+	} else if (!realm_option_do_not_touch_config (options)
+	                && realm_sssd_config_have_domain (realm_sssd_get_config (sssd),
+	                                                  realm_kerberos_get_realm_name (realm))) {
 		g_task_return_new_error (task, REALM_ERROR, REALM_ERROR_ALREADY_CONFIGURED,
 		                         _("A domain with this name is already configured"));
 

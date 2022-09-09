@@ -368,7 +368,8 @@ handle_join (RealmDbusKerberosMembership *membership,
 		return TRUE;
 	}
 
-	if (realm_options_manage_system (options, realm_kerberos_get_name (self))) {
+	if (!realm_option_do_not_touch_config (options)
+	             && realm_options_manage_system (options, realm_kerberos_get_name (self))) {
 		manages = realm_kerberos_which_manages_system ();
 		if (manages != NULL && manages != self) {
 			g_dbus_method_invocation_return_error (invocation, REALM_ERROR,

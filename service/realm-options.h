@@ -50,6 +50,8 @@ const gchar *  realm_options_ad_specific              (GVariant *options,
 
 gboolean       realm_option_use_ldaps                 (GVariant *options);
 
+gboolean       realm_option_do_not_touch_config       (GVariant *options);
+
 G_END_DECLS
 
 #endif /* __REALM_OPTIONS_H__ */

@@ -180,6 +180,7 @@ typedef struct {
 	gboolean automatic_id_mapping_set;
 	gboolean automatic_id_mapping;
 	gboolean use_ldaps;
+	gboolean do_not_touch_config;
 } RealmJoinArgs;
 
 static void
@@ -237,7 +238,7 @@ perform_join (RealmClient *client,
 
 	membership = realms->data;
 	realm = realm_client_to_realm (client, membership);
-	if (realm_is_configured (realm)) {
+	if (!args->do_not_touch_config && realm_is_configured (realm)) {
 		realm_handle_error (NULL, _("Already joined to this domain"));
 		return 1;
 	}
@@ -249,6 +250,7 @@ perform_join (RealmClient *client,
 	                               REALM_DBUS_OPTION_MEMBERSHIP_SOFTWARE, args->membership_software,
 	                               REALM_DBUS_OPTION_USER_PRINCIPAL, args->user_principal,
 	                               REALM_DBUS_OPTION_USE_LDAPS, args->use_ldaps ? "True" : "False",
+	                               REALM_DBUS_OPTION_DO_NOT_TOUCH_CONFIG, args->do_not_touch_config ? "True" : "False",
 	                               args->automatic_id_mapping_set ?
 	                                   REALM_DBUS_OPTION_AUTOMATIC_ID_MAPPING : NULL,
 	                                   args->automatic_id_mapping,
@@ -314,6 +316,8 @@ realm_join (RealmClient *client,
 		  N_("Set the user principal for the computer account"), NULL },
 		{ "use-ldaps", 0, 0, G_OPTION_ARG_NONE, &args.use_ldaps,
 		  N_("Use ldaps to connect to LDAP"), NULL },
+		{ "do-not-touch-config", 0, 0, G_OPTION_ARG_NONE, &args.do_not_touch_config,
+		  N_("Do not change client configuration"), NULL },
 		{ NULL, }
 	};
 

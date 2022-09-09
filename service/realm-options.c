@@ -214,3 +214,18 @@ gboolean realm_option_use_ldaps (GVariant *options)
 
 	return FALSE;
 }
+
+gboolean realm_option_do_not_touch_config (GVariant *options)
+{
+	const gchar *str;
+
+	str = realm_options_ad_specific (options,
+	                                 REALM_DBUS_OPTION_DO_NOT_TOUCH_CONFIG);
+	if (str != NULL
+	            && ( g_ascii_strcasecmp (str, "True") == 0
+	                || g_ascii_strcasecmp (str, "Yes") == 0)) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
