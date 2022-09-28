@@ -65,6 +65,7 @@ configure_krb5_conf_for_domain (const gchar *realm, GError **error )
 	gboolean res;
 	GFile *gfile;
 	GFileInfo *file_info = NULL;
+	const char *file_attributes = "unix::mode,unix::uid,unix::gid,selinux::*,xattr-sys::*";
 
 	config = realm_kerberos_config_new (error);
 	if (config == NULL) {
@@ -76,7 +77,7 @@ configure_krb5_conf_for_domain (const gchar *realm, GError **error )
 	 * SELinux labels stay the same this information is saved before the
 	 * change and applied to the new file afterwards. */
 	gfile = g_file_new_for_path (realm_ini_config_get_filename (config));
-	file_info = g_file_query_info (gfile, "*", 0, NULL, error);
+	file_info = g_file_query_info (gfile, file_attributes, 0, NULL, error);
 	g_object_unref (gfile);
 	if (*error != NULL) {
 		g_warning ("Couldn't load file attributes, "
