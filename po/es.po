@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: realmd\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/realmd/realmd/-/issues\n"
-"POT-Creation-Date: 2022-03-16 18:44+0100\n"
+"POT-Creation-Date: 2022-09-28 10:46+0200\n"
 "PO-Revision-Date: 2017-09-19 15:03+0000\n"
 "Last-Translator: Stef Walter <stefw@gnome.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/freedesktop/realmd/language/"
@@ -98,13 +98,13 @@ msgstr "En este sistema, LDAP no soporta conexiones UDP"
 msgid "Failed to setup LDAP connection"
 msgstr ""
 
-#: service/realm-example.c:82 service/realm-samba.c:270
-#: service/realm-sssd-ad.c:330 service/realm-sssd-ipa.c:300
+#: service/realm-example.c:82 service/realm-samba.c:293
+#: service/realm-sssd-ad.c:362 service/realm-sssd-ipa.c:304
 #, c-format
 msgid "Unsupported or unknown membership software '%s'"
 msgstr "El software de membresía «%s» es desconocido o no es compatible"
 
-#: service/realm-example.c:170 service/realm-samba.c:311
+#: service/realm-example.c:170 service/realm-samba.c:334
 msgid "Already joined to a domain"
 msgstr "Ya se unió a un dominio"
 
@@ -112,8 +112,8 @@ msgstr "Ya se unió a un dominio"
 msgid "Admin name or password is not valid"
 msgstr "El nombre o la contraseña del administrador no es válido"
 
-#: service/realm-example.c:242 service/realm-samba.c:452
-#: service/realm-sssd-ad.c:549
+#: service/realm-example.c:242 service/realm-samba.c:475
+#: service/realm-sssd-ad.c:584
 msgid "Not currently joined to this domain"
 msgstr "Actualmente no se ha unido a este dominio"
 
@@ -185,25 +185,25 @@ msgstr "No está soportado el unirse a este reino"
 msgid "Leaving this realm is not supported"
 msgstr "No está soportado el salir de este reino"
 
-#: service/realm-kerberos.c:333 service/realm-kerberos.c:505
+#: service/realm-kerberos.c:333 service/realm-kerberos.c:506
 msgid "Already running another action"
 msgstr "Ya se está ejecutando otra acción"
 
-#: service/realm-kerberos.c:376
+#: service/realm-kerberos.c:377
 #, c-format
 msgid "Already joined to another domain: %s"
 msgstr "Ya se ha unido a otro dominio: %s"
 
-#: service/realm-kerberos.c:447
+#: service/realm-kerberos.c:448
 msgid "Failed to change permitted logins. See diagnostics."
 msgstr ""
 "Falló al cambiar los inicios de sesión permitidos. Consulte los diagnósticos."
 
-#: service/realm-kerberos.c:748
+#: service/realm-kerberos.c:749
 msgid "The realm does not allow specifying logins"
 msgstr "El reino no permite los inicios de sesión específicos"
 
-#: service/realm-kerberos.c:756
+#: service/realm-kerberos.c:757
 #, c-format
 msgid "Invalid login argument%s%s%s does not match the login format."
 msgstr ""
@@ -236,11 +236,11 @@ msgstr "Instalando los paquetes necesarios"
 msgid "Failed to discover realm. See diagnostics."
 msgstr "Falló al descubrir reino. Consulte los diagnósticos."
 
-#: service/realm-samba.c:497
+#: service/realm-samba.c:520
 msgid "Not joined to this domain"
 msgstr "No se ha unido a este dominio"
 
-#: service/realm-samba.c:507 service/realm-samba.c:549
+#: service/realm-samba.c:530 service/realm-samba.c:572
 msgid "The Samba provider cannot restrict permitted logins."
 msgstr ""
 "El proveedor Samba no puede restringir los inicios de sesión permitidos."
@@ -256,11 +256,11 @@ msgstr ""
 msgid "Enabling SSSD in nsswitch.conf and PAM failed."
 msgstr "Falló al activar SSSD en nsswitch.conf y PAM."
 
-#: service/realm-sssd-ad.c:249
+#: service/realm-sssd-ad.c:277
 msgid "Unable to automatically join the domain"
 msgstr "No se pudo unir automáticamente al dominio"
 
-#: service/realm-sssd-ad.c:347
+#: service/realm-sssd-ad.c:379
 #, c-format
 msgid ""
 "Joining a domain with a one time password is only supported with the '%s' "
@@ -269,7 +269,7 @@ msgstr ""
 "Unirse a un dominio con una contraseña de un solo uso solo está soportado "
 "con el software del miembro «%s»"
 
-#: service/realm-sssd-ad.c:361
+#: service/realm-sssd-ad.c:393
 #, c-format
 msgid ""
 "Joining a domain with a user password is only supported with the '%s' "
@@ -278,16 +278,16 @@ msgstr ""
 "Unirse a un dominio con una contraseña de usuario solo está soportado con el "
 "software del miembro «%s»"
 
-#: service/realm-sssd-ad.c:377
+#: service/realm-sssd-ad.c:409
 msgid "Unsupported credentials for joining a domain"
 msgstr "No se admiten las credenciales para unirse al dominio"
 
-#: service/realm-sssd-ad.c:432 service/realm-sssd-ipa.c:304
-#: tools/realm-join.c:241
+#: service/realm-sssd-ad.c:465 service/realm-sssd-ipa.c:308
+#: tools/realm-join.c:242
 msgid "Already joined to this domain"
 msgstr "Ya se ha unido a este dominio"
 
-#: service/realm-sssd-ad.c:436 service/realm-sssd-ipa.c:308
+#: service/realm-sssd-ad.c:471 service/realm-sssd-ipa.c:312
 msgid "A domain with this name is already configured"
 msgstr "Ya está configurado un dominio con este nombre"
 
@@ -305,7 +305,13 @@ msgstr "No tiene al dominio %s en el archivo de configuración sssd.conf"
 msgid "The computer-ou argument is not supported when joining an IPA domain."
 msgstr "El argumento del equipo no está soportado al unirse a un dominio IPA."
 
-#: service/realm-sssd-ipa.c:462
+#: service/realm-sssd-ipa.c:298
+#, fuzzy
+msgid ""
+"The do-not-touch-config option is not supported when joining an IPA domain."
+msgstr "El argumento del equipo no está soportado al unirse a un dominio IPA."
+
+#: service/realm-sssd-ipa.c:466
 msgid "Not currently joined to this realm"
 msgstr "Actualmente no se ha unido a este dominio"
 
@@ -468,19 +474,19 @@ msgstr "Mostrar todos los reinos descubiertos"
 msgid "Show only the names"
 msgstr "Solo mostrar los nombres"
 
-#: tools/realm-discover.c:185 tools/realm-join.c:294 tools/realm-leave.c:271
+#: tools/realm-discover.c:185 tools/realm-join.c:296 tools/realm-leave.c:271
 msgid "Use specific client software"
 msgstr "Utilizar un software cliente específico"
 
-#: tools/realm-discover.c:186 tools/realm-join.c:300
+#: tools/realm-discover.c:186 tools/realm-join.c:302
 msgid "Use specific membership software"
 msgstr "Usar software de membresía específico"
 
-#: tools/realm-discover.c:187 tools/realm-join.c:310 tools/realm-leave.c:274
+#: tools/realm-discover.c:187 tools/realm-join.c:312 tools/realm-leave.c:274
 msgid "Use specific server software"
 msgstr "Usar software de servidor específico"
 
-#: tools/realm-discover.c:188 tools/realm-join.c:316 tools/realm-leave.c:276
+#: tools/realm-discover.c:188 tools/realm-join.c:318 tools/realm-leave.c:276
 msgid "Use ldaps to connect to LDAP"
 msgstr ""
 
@@ -492,65 +498,69 @@ msgstr "Mostrar todos los reinos"
 msgid "Couldn't join realm"
 msgstr "No se pudo unir al reino"
 
-#: tools/realm-join.c:232
+#: tools/realm-join.c:233
 msgid "Cannot join this realm"
 msgstr "No se puede unir a este reino"
 
-#: tools/realm-join.c:234
+#: tools/realm-join.c:235
 msgid "No such realm found"
 msgstr "No se ha encontrado el reino"
 
-#: tools/realm-join.c:292
+#: tools/realm-join.c:294
 msgid "Turn off automatic id mapping"
 msgstr ""
 
-#: tools/realm-join.c:296
+#: tools/realm-join.c:298
 #, fuzzy
 msgid "Use specific computer name instead of hostname"
 msgstr "Utilizar un software cliente específico"
 
-#: tools/realm-join.c:298
+#: tools/realm-join.c:300
 msgid "Computer OU DN to join"
 msgstr "OU DN del equipo que unir"
 
-#: tools/realm-join.c:302
+#: tools/realm-join.c:304
 msgid "Join automatically without a password"
 msgstr "Unirse automáticamente sin una contraseña"
 
-#: tools/realm-join.c:304
+#: tools/realm-join.c:306
 msgid "Join using a preset one time password"
 msgstr "Unirse con una contraseña preestablecida de un solo uso"
 
-#: tools/realm-join.c:306
+#: tools/realm-join.c:308
 #, fuzzy
 msgid "Use specific operation system name"
 msgstr "Utilizar un software cliente específico"
 
-#: tools/realm-join.c:308
+#: tools/realm-join.c:310
 #, fuzzy
 msgid "Use specific operation system version"
 msgstr "Usar software de servidor específico"
 
-#: tools/realm-join.c:312
+#: tools/realm-join.c:314
 msgid "User name to use for enrollment"
 msgstr "Nombre de usuario que usar para unirse"
 
-#: tools/realm-join.c:314
+#: tools/realm-join.c:316
 msgid "Set the user principal for the computer account"
 msgstr "Establecer el usuario principal para la cuenta del equipo"
 
-#: tools/realm-join.c:336
+#: tools/realm-join.c:320
+msgid "Do not change client configuration"
+msgstr ""
+
+#: tools/realm-join.c:340
 msgid "Specify one realm to join"
 msgstr "Especificar un reino al que unirse"
 
-#: tools/realm-join.c:341
+#: tools/realm-join.c:345
 msgid ""
 "The --no-password argument cannot be used with --one-time-password or --user"
 msgstr ""
 "No se puede usar el argumento --no-password con --one-time-password ni con --"
 "user"
 
-#: tools/realm-join.c:346
+#: tools/realm-join.c:350
 msgid "The --one-time-password argument cannot be used with --user"
 msgstr "No se puede usar el argumento--one-time-password con --user"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: realmd\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/realmd/realmd/-/issues\n"
-"POT-Creation-Date: 2022-03-16 18:44+0100\n"
+"POT-Creation-Date: 2022-09-28 10:46+0200\n"
 "PO-Revision-Date: 2017-09-19 19:43+0000\n"
 "Last-Translator: Serge Vylekzhanin <vylekzhanin@mail.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/freedesktop/realmd/language/"
@@ -17,9 +17,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: service/org.freedesktop.realmd.policy.in:14
 msgid "Discover realm"
@@ -94,13 +94,13 @@ msgstr "LDAP на этом компьютере не поддерживает UD
 msgid "Failed to setup LDAP connection"
 msgstr ""
 
-#: service/realm-example.c:82 service/realm-samba.c:270
-#: service/realm-sssd-ad.c:330 service/realm-sssd-ipa.c:300
+#: service/realm-example.c:82 service/realm-samba.c:293
+#: service/realm-sssd-ad.c:362 service/realm-sssd-ipa.c:304
 #, c-format
 msgid "Unsupported or unknown membership software '%s'"
 msgstr "Неподдерживаемое или неизвестное ПО для членства '%s'"
 
-#: service/realm-example.c:170 service/realm-samba.c:311
+#: service/realm-example.c:170 service/realm-samba.c:334
 msgid "Already joined to a domain"
 msgstr "Уже присоединены к домену"
 
@@ -108,8 +108,8 @@ msgstr "Уже присоединены к домену"
 msgid "Admin name or password is not valid"
 msgstr "Имя или пароль администратора недействительны"
 
-#: service/realm-example.c:242 service/realm-samba.c:452
-#: service/realm-sssd-ad.c:549
+#: service/realm-example.c:242 service/realm-samba.c:475
+#: service/realm-sssd-ad.c:584
 msgid "Not currently joined to this domain"
 msgstr "В настоящее время не присоединены к этому домену"
 
@@ -184,26 +184,26 @@ msgstr "Присоединение к этой области не поддер�
 msgid "Leaving this realm is not supported"
 msgstr "Отсоединение от этой области не поддерживается"
 
-#: service/realm-kerberos.c:333 service/realm-kerberos.c:505
+#: service/realm-kerberos.c:333 service/realm-kerberos.c:506
 msgid "Already running another action"
 msgstr "Уже запущено другое действие"
 
-#: service/realm-kerberos.c:376
+#: service/realm-kerberos.c:377
 #, c-format
 msgid "Already joined to another domain: %s"
 msgstr "Уже присоединены к другому домену: %s"
 
-#: service/realm-kerberos.c:447
+#: service/realm-kerberos.c:448
 msgid "Failed to change permitted logins. See diagnostics."
 msgstr ""
 "Не удалось изменить разрешённые учётные записи. Смотрите диагностические "
 "сообщения."
 
-#: service/realm-kerberos.c:748
+#: service/realm-kerberos.c:749
 msgid "The realm does not allow specifying logins"
 msgstr "Область не позволяет определять логины"
 
-#: service/realm-kerberos.c:756
+#: service/realm-kerberos.c:757
 #, c-format
 msgid "Invalid login argument%s%s%s does not match the login format."
 msgstr ""
@@ -237,11 +237,11 @@ msgstr "Установка необходимых пакетов"
 msgid "Failed to discover realm. See diagnostics."
 msgstr "Не удалось обнаружить область. Смотрите диагностические сообщения."
 
-#: service/realm-samba.c:497
+#: service/realm-samba.c:520
 msgid "Not joined to this domain"
 msgstr "Не присоединены к этому домену"
 
-#: service/realm-samba.c:507 service/realm-samba.c:549
+#: service/realm-samba.c:530 service/realm-samba.c:572
 msgid "The Samba provider cannot restrict permitted logins."
 msgstr "Провайдер Samba не может ограничить разрешенные учётные записи."
 
@@ -255,11 +255,11 @@ msgstr ""
 msgid "Enabling SSSD in nsswitch.conf and PAM failed."
 msgstr "Включение SSSD в nsswitch.conf и PAM не удалось."
 
-#: service/realm-sssd-ad.c:249
+#: service/realm-sssd-ad.c:277
 msgid "Unable to automatically join the domain"
 msgstr "Невозможно автоматически присоединиться к домену"
 
-#: service/realm-sssd-ad.c:347
+#: service/realm-sssd-ad.c:379
 #, c-format
 msgid ""
 "Joining a domain with a one time password is only supported with the '%s' "
@@ -268,7 +268,7 @@ msgstr ""
 "Присоединение к домену с одноразовым паролем поддерживается только с ПО для "
 "членства '%s'"
 
-#: service/realm-sssd-ad.c:361
+#: service/realm-sssd-ad.c:393
 #, c-format
 msgid ""
 "Joining a domain with a user password is only supported with the '%s' "
@@ -277,16 +277,16 @@ msgstr ""
 "Присоединение к домену с пользовательским паролем поддерживается только с ПО "
 "для членства '%s'"
 
-#: service/realm-sssd-ad.c:377
+#: service/realm-sssd-ad.c:409
 msgid "Unsupported credentials for joining a domain"
 msgstr "Неподдерживаемые учетные данные для присоединения к домену"
 
-#: service/realm-sssd-ad.c:432 service/realm-sssd-ipa.c:304
-#: tools/realm-join.c:241
+#: service/realm-sssd-ad.c:465 service/realm-sssd-ipa.c:308
+#: tools/realm-join.c:242
 msgid "Already joined to this domain"
 msgstr "Уже присоединены к этому домену"
 
-#: service/realm-sssd-ad.c:436 service/realm-sssd-ipa.c:308
+#: service/realm-sssd-ad.c:471 service/realm-sssd-ipa.c:312
 msgid "A domain with this name is already configured"
 msgstr "Домен с таким именем уже настроен"
 
@@ -305,7 +305,14 @@ msgid "The computer-ou argument is not supported when joining an IPA domain."
 msgstr ""
 "Аргумент «computer-ou» не поддерживается при присоединении к домену IPA."
 
-#: service/realm-sssd-ipa.c:462
+#: service/realm-sssd-ipa.c:298
+#, fuzzy
+msgid ""
+"The do-not-touch-config option is not supported when joining an IPA domain."
+msgstr ""
+"Аргумент «computer-ou» не поддерживается при присоединении к домену IPA."
+
+#: service/realm-sssd-ipa.c:466
 msgid "Not currently joined to this realm"
 msgstr "В настоящее время не присоединены к этой области"
 
@@ -468,19 +475,19 @@ msgstr "Показать все обнаруженные области"
 msgid "Show only the names"
 msgstr "Показать только имена"
 
-#: tools/realm-discover.c:185 tools/realm-join.c:294 tools/realm-leave.c:271
+#: tools/realm-discover.c:185 tools/realm-join.c:296 tools/realm-leave.c:271
 msgid "Use specific client software"
 msgstr "Использовать определённый клиент ПО"
 
-#: tools/realm-discover.c:186 tools/realm-join.c:300
+#: tools/realm-discover.c:186 tools/realm-join.c:302
 msgid "Use specific membership software"
 msgstr "Использовать определённое ПО для членства"
 
-#: tools/realm-discover.c:187 tools/realm-join.c:310 tools/realm-leave.c:274
+#: tools/realm-discover.c:187 tools/realm-join.c:312 tools/realm-leave.c:274
 msgid "Use specific server software"
 msgstr "Использовать определённое серверное ПО"
 
-#: tools/realm-discover.c:188 tools/realm-join.c:316 tools/realm-leave.c:276
+#: tools/realm-discover.c:188 tools/realm-join.c:318 tools/realm-leave.c:276
 msgid "Use ldaps to connect to LDAP"
 msgstr ""
 
@@ -492,65 +499,69 @@ msgstr "Показать все области"
 msgid "Couldn't join realm"
 msgstr "Не удалось присоединиться к области"
 
-#: tools/realm-join.c:232
+#: tools/realm-join.c:233
 msgid "Cannot join this realm"
 msgstr "Не могу присоединиться к этой области"
 
-#: tools/realm-join.c:234
+#: tools/realm-join.c:235
 msgid "No such realm found"
 msgstr "Такая область не найдена"
 
-#: tools/realm-join.c:292
+#: tools/realm-join.c:294
 msgid "Turn off automatic id mapping"
 msgstr "Отключить автоматическую привязку идентификаторов"
 
-#: tools/realm-join.c:296
+#: tools/realm-join.c:298
 #, fuzzy
 msgid "Use specific computer name instead of hostname"
 msgstr "Использовать определённый клиент ПО"
 
-#: tools/realm-join.c:298
+#: tools/realm-join.c:300
 msgid "Computer OU DN to join"
 msgstr "Компьютерные «OU DN» для присоединения"
 
-#: tools/realm-join.c:302
+#: tools/realm-join.c:304
 msgid "Join automatically without a password"
 msgstr "Присоединяться автоматически, без ввода пароля"
 
-#: tools/realm-join.c:304
+#: tools/realm-join.c:306
 msgid "Join using a preset one time password"
 msgstr "Присоединяться, используя предустановленный одноразовый пароль"
 
-#: tools/realm-join.c:306
+#: tools/realm-join.c:308
 #, fuzzy
 msgid "Use specific operation system name"
 msgstr "Использовать определённый клиент ПО"
 
-#: tools/realm-join.c:308
+#: tools/realm-join.c:310
 #, fuzzy
 msgid "Use specific operation system version"
 msgstr "Использовать определённое серверное ПО"
 
-#: tools/realm-join.c:312
+#: tools/realm-join.c:314
 msgid "User name to use for enrollment"
 msgstr "Имя пользователя для использования при вступлении"
 
-#: tools/realm-join.c:314
+#: tools/realm-join.c:316
 msgid "Set the user principal for the computer account"
 msgstr "Установить главного пользователя для учетной записи компьютера"
 
-#: tools/realm-join.c:336
+#: tools/realm-join.c:320
+msgid "Do not change client configuration"
+msgstr ""
+
+#: tools/realm-join.c:340
 msgid "Specify one realm to join"
 msgstr "Определите одну область для присоединения"
 
-#: tools/realm-join.c:341
+#: tools/realm-join.c:345
 msgid ""
 "The --no-password argument cannot be used with --one-time-password or --user"
 msgstr ""
 "Аргумент «--no-password» не может быть использован с «--one-time-password» "
 "или «--user»"
 
-#: tools/realm-join.c:346
+#: tools/realm-join.c:350
 msgid "The --one-time-password argument cannot be used with --user"
 msgstr "Аргумент «--one-time-password» не может быть использован с «--user»"
 

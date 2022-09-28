@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: realmd\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/realmd/realmd/-/issues\n"
-"POT-Creation-Date: 2022-03-16 18:44+0100\n"
+"POT-Creation-Date: 2022-09-28 10:46+0200\n"
 "PO-Revision-Date: 2019-09-29 17:16+0000\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/freedesktop/realmd/language/"
@@ -97,13 +97,13 @@ msgstr "En aquest sistema, LDAP no accepta les connexions UDP"
 msgid "Failed to setup LDAP connection"
 msgstr ""
 
-#: service/realm-example.c:82 service/realm-samba.c:270
-#: service/realm-sssd-ad.c:330 service/realm-sssd-ipa.c:300
+#: service/realm-example.c:82 service/realm-samba.c:293
+#: service/realm-sssd-ad.c:362 service/realm-sssd-ipa.c:304
 #, c-format
 msgid "Unsupported or unknown membership software '%s'"
 msgstr "Programari de membres no compatible o desconegut «%s»"
 
-#: service/realm-example.c:170 service/realm-samba.c:311
+#: service/realm-example.c:170 service/realm-samba.c:334
 msgid "Already joined to a domain"
 msgstr "Ja es va unir a un domini"
 
@@ -111,8 +111,8 @@ msgstr "Ja es va unir a un domini"
 msgid "Admin name or password is not valid"
 msgstr "El nom de l'administrador o la contrasenya no són vàlids"
 
-#: service/realm-example.c:242 service/realm-samba.c:452
-#: service/realm-sssd-ad.c:549
+#: service/realm-example.c:242 service/realm-samba.c:475
+#: service/realm-sssd-ad.c:584
 msgid "Not currently joined to this domain"
 msgstr "Actualment no s'ha unit a aquest domini"
 
@@ -188,25 +188,25 @@ msgstr "Aquest reialme no admet la unió"
 msgid "Leaving this realm is not supported"
 msgstr "Aquest reialme no admet l'abandonament"
 
-#: service/realm-kerberos.c:333 service/realm-kerberos.c:505
+#: service/realm-kerberos.c:333 service/realm-kerberos.c:506
 msgid "Already running another action"
 msgstr "Ja s'està executant una altra acció"
 
-#: service/realm-kerberos.c:376
+#: service/realm-kerberos.c:377
 #, c-format
 msgid "Already joined to another domain: %s"
 msgstr "Ja es va unir a un altre domini: %s"
 
-#: service/realm-kerberos.c:447
+#: service/realm-kerberos.c:448
 msgid "Failed to change permitted logins. See diagnostics."
 msgstr ""
 "No s'han pogut canviar els inicis de sessió permesos. Vegeu els diagnòstics."
 
-#: service/realm-kerberos.c:748
+#: service/realm-kerberos.c:749
 msgid "The realm does not allow specifying logins"
 msgstr "El reialme no admet l'especificació dels inicis de sessió"
 
-#: service/realm-kerberos.c:756
+#: service/realm-kerberos.c:757
 #, c-format
 msgid "Invalid login argument%s%s%s does not match the login format."
 msgstr ""
@@ -240,11 +240,11 @@ msgstr "S'estan instal·lant els paquets necessaris"
 msgid "Failed to discover realm. See diagnostics."
 msgstr "No s'ha pogut descobrir el reialme. Vegeu els diagnòstics."
 
-#: service/realm-samba.c:497
+#: service/realm-samba.c:520
 msgid "Not joined to this domain"
 msgstr "No s'ha unit a aquest domini"
 
-#: service/realm-samba.c:507 service/realm-samba.c:549
+#: service/realm-samba.c:530 service/realm-samba.c:572
 msgid "The Samba provider cannot restrict permitted logins."
 msgstr "El proveïdor de Samba no pot restringir els inicis permesos de sessió."
 
@@ -257,11 +257,11 @@ msgstr "L'argument no vàlid d'inici de sessió «%s» conté caràcters no adme
 msgid "Enabling SSSD in nsswitch.conf and PAM failed."
 msgstr "No s'ha pogut habilitar SSSD a nsswitch.conf i PAM."
 
-#: service/realm-sssd-ad.c:249
+#: service/realm-sssd-ad.c:277
 msgid "Unable to automatically join the domain"
 msgstr "No s'ha pogut unir automàticament al domini"
 
-#: service/realm-sssd-ad.c:347
+#: service/realm-sssd-ad.c:379
 #, c-format
 msgid ""
 "Joining a domain with a one time password is only supported with the '%s' "
@@ -270,7 +270,7 @@ msgstr ""
 "La unió a un domini amb una contrasenya d'un sol ús només és compatible amb "
 "el programari de membres «%s»"
 
-#: service/realm-sssd-ad.c:361
+#: service/realm-sssd-ad.c:393
 #, c-format
 msgid ""
 "Joining a domain with a user password is only supported with the '%s' "
@@ -279,16 +279,16 @@ msgstr ""
 "La unió a un domini amb una contrasenya d'usuari només és compatible amb el "
 "programari de membres «%s»"
 
-#: service/realm-sssd-ad.c:377
+#: service/realm-sssd-ad.c:409
 msgid "Unsupported credentials for joining a domain"
 msgstr "Credencials no admeses per unir-se a un domini"
 
-#: service/realm-sssd-ad.c:432 service/realm-sssd-ipa.c:304
-#: tools/realm-join.c:241
+#: service/realm-sssd-ad.c:465 service/realm-sssd-ipa.c:308
+#: tools/realm-join.c:242
 msgid "Already joined to this domain"
 msgstr "Ja es va unir a aquest domini"
 
-#: service/realm-sssd-ad.c:436 service/realm-sssd-ipa.c:308
+#: service/realm-sssd-ad.c:471 service/realm-sssd-ipa.c:312
 msgid "A domain with this name is already configured"
 msgstr "Ja s'ha configurat un domini amb aquest nom"
 
@@ -306,7 +306,13 @@ msgstr "No hi ha el domini %s al fitxer de configuració sssd.conf"
 msgid "The computer-ou argument is not supported when joining an IPA domain."
 msgstr "L'argument computer-ou no s'admet quan s'uneix a un domini IPA."
 
-#: service/realm-sssd-ipa.c:462
+#: service/realm-sssd-ipa.c:298
+#, fuzzy
+msgid ""
+"The do-not-touch-config option is not supported when joining an IPA domain."
+msgstr "L'argument computer-ou no s'admet quan s'uneix a un domini IPA."
+
+#: service/realm-sssd-ipa.c:466
 msgid "Not currently joined to this realm"
 msgstr "Actualment no s'ha unit a aquest reialme"
 
@@ -472,19 +478,19 @@ msgstr "Mostra tots els reialmes descoberts"
 msgid "Show only the names"
 msgstr "Mostra únicament els noms"
 
-#: tools/realm-discover.c:185 tools/realm-join.c:294 tools/realm-leave.c:271
+#: tools/realm-discover.c:185 tools/realm-join.c:296 tools/realm-leave.c:271
 msgid "Use specific client software"
 msgstr "Utilitza el programari específic de client"
 
-#: tools/realm-discover.c:186 tools/realm-join.c:300
+#: tools/realm-discover.c:186 tools/realm-join.c:302
 msgid "Use specific membership software"
 msgstr "Utilitza el programari específic de membre"
 
-#: tools/realm-discover.c:187 tools/realm-join.c:310 tools/realm-leave.c:274
+#: tools/realm-discover.c:187 tools/realm-join.c:312 tools/realm-leave.c:274
 msgid "Use specific server software"
 msgstr "Utilitza el programari específic de servidor"
 
-#: tools/realm-discover.c:188 tools/realm-join.c:316 tools/realm-leave.c:276
+#: tools/realm-discover.c:188 tools/realm-join.c:318 tools/realm-leave.c:276
 msgid "Use ldaps to connect to LDAP"
 msgstr ""
 
@@ -496,64 +502,68 @@ msgstr "Mostra tots els reialmes"
 msgid "Couldn't join realm"
 msgstr "No s'ha pogut unir al reialme"
 
-#: tools/realm-join.c:232
+#: tools/realm-join.c:233
 msgid "Cannot join this realm"
 msgstr "No s'ha pogut unir a aquest reialme"
 
-#: tools/realm-join.c:234
+#: tools/realm-join.c:235
 msgid "No such realm found"
 msgstr "No s'ha trobat el reialme"
 
-#: tools/realm-join.c:292
+#: tools/realm-join.c:294
 msgid "Turn off automatic id mapping"
 msgstr "Desactiva l'assignació automàtica d'id."
 
-#: tools/realm-join.c:296
+#: tools/realm-join.c:298
 #, fuzzy
 msgid "Use specific computer name instead of hostname"
 msgstr "Utilitza el programari específic de client"
 
-#: tools/realm-join.c:298
+#: tools/realm-join.c:300
 msgid "Computer OU DN to join"
 msgstr "OU i DN de l'ordinador a unir-se"
 
-#: tools/realm-join.c:302
+#: tools/realm-join.c:304
 msgid "Join automatically without a password"
 msgstr "Uneix-te automàticament sense contrasenya"
 
-#: tools/realm-join.c:304
+#: tools/realm-join.c:306
 msgid "Join using a preset one time password"
 msgstr "Uneix-te amb una contrasenya preestablerta d'un sol ús"
 
-#: tools/realm-join.c:306
+#: tools/realm-join.c:308
 #, fuzzy
 msgid "Use specific operation system name"
 msgstr "Utilitza el programari específic de client"
 
-#: tools/realm-join.c:308
+#: tools/realm-join.c:310
 #, fuzzy
 msgid "Use specific operation system version"
 msgstr "Utilitza el programari específic de servidor"
 
-#: tools/realm-join.c:312
+#: tools/realm-join.c:314
 msgid "User name to use for enrollment"
 msgstr "Nom d'usuari per utilitzar en la inscripció"
 
-#: tools/realm-join.c:314
+#: tools/realm-join.c:316
 msgid "Set the user principal for the computer account"
 msgstr "Estableix el principal usuari per al compte de l'ordinador"
 
-#: tools/realm-join.c:336
+#: tools/realm-join.c:320
+msgid "Do not change client configuration"
+msgstr ""
+
+#: tools/realm-join.c:340
 msgid "Specify one realm to join"
 msgstr "Especifica un reialme a unir-se"
 
-#: tools/realm-join.c:341
+#: tools/realm-join.c:345
 msgid ""
 "The --no-password argument cannot be used with --one-time-password or --user"
 msgstr ""
 "L'argument --no-password no pot utilitzar-se amb --one-time-password o --user"
 
-#: tools/realm-join.c:346
+#: tools/realm-join.c:350
 msgid "The --one-time-password argument cannot be used with --user"
 msgstr "L'argument --one-time-password no es pot utilitzar amb --user"
 

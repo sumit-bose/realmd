@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: realmd\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/realmd/realmd/-/issues\n"
-"POT-Creation-Date: 2022-03-16 18:44+0100\n"
+"POT-Creation-Date: 2022-09-28 10:46+0200\n"
 "PO-Revision-Date: 2017-09-19 16:43+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/freedesktop/realmd/language/"
@@ -96,13 +96,13 @@ msgstr "이 시스템의 LDAP은 UDP 연결을 지원하지 않음"
 msgid "Failed to setup LDAP connection"
 msgstr ""
 
-#: service/realm-example.c:82 service/realm-samba.c:270
-#: service/realm-sssd-ad.c:330 service/realm-sssd-ipa.c:300
+#: service/realm-example.c:82 service/realm-samba.c:293
+#: service/realm-sssd-ad.c:362 service/realm-sssd-ipa.c:304
 #, c-format
 msgid "Unsupported or unknown membership software '%s'"
 msgstr "지원하지 않거나 알 수 없는 구성원 소프트웨어 '%s'"
 
-#: service/realm-example.c:170 service/realm-samba.c:311
+#: service/realm-example.c:170 service/realm-samba.c:334
 msgid "Already joined to a domain"
 msgstr "이미 도메인에 추가됨"
 
@@ -110,8 +110,8 @@ msgstr "이미 도메인에 추가됨"
 msgid "Admin name or password is not valid"
 msgstr "관리자 이름이나 암호가 잘못됨"
 
-#: service/realm-example.c:242 service/realm-samba.c:452
-#: service/realm-sssd-ad.c:549
+#: service/realm-example.c:242 service/realm-samba.c:475
+#: service/realm-sssd-ad.c:584
 msgid "Not currently joined to this domain"
 msgstr "현재 이 도메인에 참여하고 있지 않음"
 
@@ -181,24 +181,24 @@ msgstr "이 영역에 등록할 수 없음"
 msgid "Leaving this realm is not supported"
 msgstr "이 영역을 떠날 수 없음"
 
-#: service/realm-kerberos.c:333 service/realm-kerberos.c:505
+#: service/realm-kerberos.c:333 service/realm-kerberos.c:506
 msgid "Already running another action"
 msgstr "다른 동작이 이미 실행 중"
 
-#: service/realm-kerberos.c:376
+#: service/realm-kerberos.c:377
 #, c-format
 msgid "Already joined to another domain: %s"
 msgstr "다른 도메인에 이미 참여함: %s"
 
-#: service/realm-kerberos.c:447
+#: service/realm-kerberos.c:448
 msgid "Failed to change permitted logins. See diagnostics."
 msgstr "허용되는 로그인 정보를 변경할 수 없습니다. 진단 기록을 참조하십시오."
 
-#: service/realm-kerberos.c:748
+#: service/realm-kerberos.c:749
 msgid "The realm does not allow specifying logins"
 msgstr "이 영역에는 로그인을 지정할 수 없음"
 
-#: service/realm-kerberos.c:756
+#: service/realm-kerberos.c:757
 #, c-format
 msgid "Invalid login argument%s%s%s does not match the login format."
 msgstr "잘못된 로그인 인자 %s%s%s이(가) 로그인 형식과 일치하지 않습니다."
@@ -230,11 +230,11 @@ msgstr "필요한 패키지 설치 중"
 msgid "Failed to discover realm. See diagnostics."
 msgstr "영역을 발견할 수 없습니다. 진단 기록을 참조하십시오."
 
-#: service/realm-samba.c:497
+#: service/realm-samba.c:520
 msgid "Not joined to this domain"
 msgstr "이 도메인에 참여하지 않았음"
 
-#: service/realm-samba.c:507 service/realm-samba.c:549
+#: service/realm-samba.c:530 service/realm-samba.c:572
 msgid "The Samba provider cannot restrict permitted logins."
 msgstr "Samba 공급자가 허용된 로그인을 제한할 수 없습니다."
 
@@ -247,11 +247,11 @@ msgstr "잘못된 로그인 인자 '%s'에 지원하지 않는 문자가 포함�
 msgid "Enabling SSSD in nsswitch.conf and PAM failed."
 msgstr "nsswitch.conf와 PAM에서 SSSD를 활성화할 수 없습니다."
 
-#: service/realm-sssd-ad.c:249
+#: service/realm-sssd-ad.c:277
 msgid "Unable to automatically join the domain"
 msgstr "도메인에 자동으로 등록할 수 없음"
 
-#: service/realm-sssd-ad.c:347
+#: service/realm-sssd-ad.c:379
 #, c-format
 msgid ""
 "Joining a domain with a one time password is only supported with the '%s' "
@@ -260,7 +260,7 @@ msgstr ""
 "일회용 암호를 사용하여 도메인에 등록하는 것은 '%s' 구성원 소프트웨어에서만 지"
 "원함"
 
-#: service/realm-sssd-ad.c:361
+#: service/realm-sssd-ad.c:393
 #, c-format
 msgid ""
 "Joining a domain with a user password is only supported with the '%s' "
@@ -269,16 +269,16 @@ msgstr ""
 "사용자 암호를 사용하여 도메인에 등록하는 것은 '%s' 구성원 소프트웨어에서만 지"
 "원함"
 
-#: service/realm-sssd-ad.c:377
+#: service/realm-sssd-ad.c:409
 msgid "Unsupported credentials for joining a domain"
 msgstr "도메인에 참여하기 위하여 지원되지 않는 인증 정보"
 
-#: service/realm-sssd-ad.c:432 service/realm-sssd-ipa.c:304
-#: tools/realm-join.c:241
+#: service/realm-sssd-ad.c:465 service/realm-sssd-ipa.c:308
+#: tools/realm-join.c:242
 msgid "Already joined to this domain"
 msgstr "이미 도메인에 등록됨"
 
-#: service/realm-sssd-ad.c:436 service/realm-sssd-ipa.c:308
+#: service/realm-sssd-ad.c:471 service/realm-sssd-ipa.c:312
 msgid "A domain with this name is already configured"
 msgstr "같은 이름의 도메인이 이미 설정됨"
 
@@ -296,7 +296,13 @@ msgstr "sssd.conf 설정 파일에 도메인 %s이(가) 없음"
 msgid "The computer-ou argument is not supported when joining an IPA domain."
 msgstr "IPA 도메인에 등록할 때 computer-ou 인자를 지원하지 않습니다."
 
-#: service/realm-sssd-ipa.c:462
+#: service/realm-sssd-ipa.c:298
+#, fuzzy
+msgid ""
+"The do-not-touch-config option is not supported when joining an IPA domain."
+msgstr "IPA 도메인에 등록할 때 computer-ou 인자를 지원하지 않습니다."
+
+#: service/realm-sssd-ipa.c:466
 msgid "Not currently joined to this realm"
 msgstr "이 영역에 등록되어 있지 않음"
 
@@ -458,19 +464,19 @@ msgstr "모든 발견한 영역 표시"
 msgid "Show only the names"
 msgstr "이름만 표시"
 
-#: tools/realm-discover.c:185 tools/realm-join.c:294 tools/realm-leave.c:271
+#: tools/realm-discover.c:185 tools/realm-join.c:296 tools/realm-leave.c:271
 msgid "Use specific client software"
 msgstr "지정한 클라이언트 소프트웨어 사용"
 
-#: tools/realm-discover.c:186 tools/realm-join.c:300
+#: tools/realm-discover.c:186 tools/realm-join.c:302
 msgid "Use specific membership software"
 msgstr "지정한 구성원 소프트웨어 사용"
 
-#: tools/realm-discover.c:187 tools/realm-join.c:310 tools/realm-leave.c:274
+#: tools/realm-discover.c:187 tools/realm-join.c:312 tools/realm-leave.c:274
 msgid "Use specific server software"
 msgstr "지정한 서버 소프트웨어 사용"
 
-#: tools/realm-discover.c:188 tools/realm-join.c:316 tools/realm-leave.c:276
+#: tools/realm-discover.c:188 tools/realm-join.c:318 tools/realm-leave.c:276
 msgid "Use ldaps to connect to LDAP"
 msgstr ""
 
@@ -482,64 +488,68 @@ msgstr "모든 영역 표시"
 msgid "Couldn't join realm"
 msgstr "영역에 등록할 수 없음"
 
-#: tools/realm-join.c:232
+#: tools/realm-join.c:233
 msgid "Cannot join this realm"
 msgstr "이 영역에 등록할 수 없음"
 
-#: tools/realm-join.c:234
+#: tools/realm-join.c:235
 msgid "No such realm found"
 msgstr "영역을 찾을 수 없음"
 
-#: tools/realm-join.c:292
+#: tools/realm-join.c:294
 msgid "Turn off automatic id mapping"
 msgstr "자동 ID 대응 비활성화"
 
-#: tools/realm-join.c:296
+#: tools/realm-join.c:298
 #, fuzzy
 msgid "Use specific computer name instead of hostname"
 msgstr "지정한 클라이언트 소프트웨어 사용"
 
-#: tools/realm-join.c:298
+#: tools/realm-join.c:300
 msgid "Computer OU DN to join"
 msgstr "등록할 Computer OU DN"
 
-#: tools/realm-join.c:302
+#: tools/realm-join.c:304
 msgid "Join automatically without a password"
 msgstr "암호 없이 자동으로 등록"
 
-#: tools/realm-join.c:304
+#: tools/realm-join.c:306
 msgid "Join using a preset one time password"
 msgstr "미리 설정한 일회용 암호로 등록"
 
-#: tools/realm-join.c:306
+#: tools/realm-join.c:308
 #, fuzzy
 msgid "Use specific operation system name"
 msgstr "지정한 클라이언트 소프트웨어 사용"
 
-#: tools/realm-join.c:308
+#: tools/realm-join.c:310
 #, fuzzy
 msgid "Use specific operation system version"
 msgstr "지정한 서버 소프트웨어 사용"
 
-#: tools/realm-join.c:312
+#: tools/realm-join.c:314
 msgid "User name to use for enrollment"
 msgstr "등록에 사용할 사용자 이름"
 
-#: tools/realm-join.c:314
+#: tools/realm-join.c:316
 msgid "Set the user principal for the computer account"
 msgstr "컴퓨터 계정의 사용자 원칙 설정"
 
-#: tools/realm-join.c:336
+#: tools/realm-join.c:320
+msgid "Do not change client configuration"
+msgstr ""
+
+#: tools/realm-join.c:340
 msgid "Specify one realm to join"
 msgstr "등록할 하나의 영역 지정"
 
-#: tools/realm-join.c:341
+#: tools/realm-join.c:345
 msgid ""
 "The --no-password argument cannot be used with --one-time-password or --user"
 msgstr ""
 "--no-password 인자는 --one-time-password 및 --user 인자와 같이 사용할 수 없음"
 
-#: tools/realm-join.c:346
+#: tools/realm-join.c:350
 msgid "The --one-time-password argument cannot be used with --user"
 msgstr "--one-time-password 인자는 --user 인자와 같이 사용할 수 없음"
 

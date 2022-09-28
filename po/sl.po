@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: realmd\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/realmd/realmd/-/issues\n"
-"POT-Creation-Date: 2022-03-16 18:44+0100\n"
+"POT-Creation-Date: 2022-09-28 10:46+0200\n"
 "PO-Revision-Date: 2017-09-19 15:03+0000\n"
 "Last-Translator: Stef Walter <stefw@gnome.org>\n"
 "Language-Team: Slovenian (http://www.transifex.com/freedesktop/realmd/"
@@ -18,8 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3);\n"
 
 #: service/org.freedesktop.realmd.policy.in:14
 msgid "Discover realm"
@@ -93,13 +93,13 @@ msgstr "LDAP tega sistema ne podpira povezav UDP."
 msgid "Failed to setup LDAP connection"
 msgstr ""
 
-#: service/realm-example.c:82 service/realm-samba.c:270
-#: service/realm-sssd-ad.c:330 service/realm-sssd-ipa.c:300
+#: service/realm-example.c:82 service/realm-samba.c:293
+#: service/realm-sssd-ad.c:362 service/realm-sssd-ipa.c:304
 #, c-format
 msgid "Unsupported or unknown membership software '%s'"
 msgstr "Nepodprta ali neznana članska programska oprema '%s'"
 
-#: service/realm-example.c:170 service/realm-samba.c:311
+#: service/realm-example.c:170 service/realm-samba.c:334
 msgid "Already joined to a domain"
 msgstr "Naprava je že pridružena domeni"
 
@@ -107,8 +107,8 @@ msgstr "Naprava je že pridružena domeni"
 msgid "Admin name or password is not valid"
 msgstr "Ime ali geslo skrbnika ni veljavno"
 
-#: service/realm-example.c:242 service/realm-samba.c:452
-#: service/realm-sssd-ad.c:549
+#: service/realm-example.c:242 service/realm-samba.c:475
+#: service/realm-sssd-ad.c:584
 msgid "Not currently joined to this domain"
 msgstr "Naprava trenutno ni pridružena domeni"
 
@@ -180,26 +180,26 @@ msgstr "Pridruževanju temu polju ni podprto."
 msgid "Leaving this realm is not supported"
 msgstr "Zapuščanje tega polja ni podprto."
 
-#: service/realm-kerberos.c:333 service/realm-kerberos.c:505
+#: service/realm-kerberos.c:333 service/realm-kerberos.c:506
 msgid "Already running another action"
 msgstr "Trenutno je dejavno že drugo opravilo."
 
-#: service/realm-kerberos.c:376
+#: service/realm-kerberos.c:377
 #, c-format
 msgid "Already joined to another domain: %s"
 msgstr "Že pridruženi drugi domeni: %s"
 
-#: service/realm-kerberos.c:447
+#: service/realm-kerberos.c:448
 msgid "Failed to change permitted logins. See diagnostics."
 msgstr ""
 "Spreminjanje dovoljenih prijav je spodletelo. Več podrobnosti je v odvodu "
 "opravila."
 
-#: service/realm-kerberos.c:748
+#: service/realm-kerberos.c:749
 msgid "The realm does not allow specifying logins"
 msgstr "V polju ni dovoljeno navajanje prijav."
 
-#: service/realm-kerberos.c:756
+#: service/realm-kerberos.c:757
 #, c-format
 msgid "Invalid login argument%s%s%s does not match the login format."
 msgstr "Neveljaven prijavni argument %s%s%s ni skladen s prijavnim zapisom."
@@ -231,11 +231,11 @@ msgstr "Nameščanje obveznih paketov"
 msgid "Failed to discover realm. See diagnostics."
 msgstr "Zaznavanje polja je spodletelo. Več podrobnosti napake je v odvodu."
 
-#: service/realm-samba.c:497
+#: service/realm-samba.c:520
 msgid "Not joined to this domain"
 msgstr "Naprava ni pridružena domeni."
 
-#: service/realm-samba.c:507 service/realm-samba.c:549
+#: service/realm-samba.c:530 service/realm-samba.c:572
 msgid "The Samba provider cannot restrict permitted logins."
 msgstr "Ponudnik Samba ne omogoča omejevanja dovoljenih prijav."
 
@@ -248,11 +248,11 @@ msgstr "Neveljaven prijavni argument '%s' vsebuje nepodprte znake."
 msgid "Enabling SSSD in nsswitch.conf and PAM failed."
 msgstr "Omogočanje SSSD v nastavitvah nsswitch.conf in PAM je spodletelo."
 
-#: service/realm-sssd-ad.c:249
+#: service/realm-sssd-ad.c:277
 msgid "Unable to automatically join the domain"
 msgstr "Domeni se ni mogoče samodejno pridružiti domeni"
 
-#: service/realm-sssd-ad.c:347
+#: service/realm-sssd-ad.c:379
 #, c-format
 msgid ""
 "Joining a domain with a one time password is only supported with the '%s' "
@@ -261,7 +261,7 @@ msgstr ""
 "Pridruženje domeni z uporabo enkratnega gesla je podprto le s člansko "
 "programsko opremo '%s'"
 
-#: service/realm-sssd-ad.c:361
+#: service/realm-sssd-ad.c:393
 #, c-format
 msgid ""
 "Joining a domain with a user password is only supported with the '%s' "
@@ -270,16 +270,16 @@ msgstr ""
 "Pridruženje domeni z uporabo uporabniškega gesla je podprto le s člansko "
 "programsko opremo '%s'"
 
-#: service/realm-sssd-ad.c:377
+#: service/realm-sssd-ad.c:409
 msgid "Unsupported credentials for joining a domain"
 msgstr "Nepodprta vrsta poveril za pridruženje domeni"
 
-#: service/realm-sssd-ad.c:432 service/realm-sssd-ipa.c:304
-#: tools/realm-join.c:241
+#: service/realm-sssd-ad.c:465 service/realm-sssd-ipa.c:308
+#: tools/realm-join.c:242
 msgid "Already joined to this domain"
 msgstr "Naprava je že pridružena tej domeni."
 
-#: service/realm-sssd-ad.c:436 service/realm-sssd-ipa.c:308
+#: service/realm-sssd-ad.c:471 service/realm-sssd-ipa.c:312
 msgid "A domain with this name is already configured"
 msgstr "Domena s tem imenom je že nastavljena"
 
@@ -297,7 +297,13 @@ msgstr "Domena %s ni zavedena v nastavitveni datoteki "
 msgid "The computer-ou argument is not supported when joining an IPA domain."
 msgstr "Ob pridruževanju domeni IPA argument computer-ou ni podprt."
 
-#: service/realm-sssd-ipa.c:462
+#: service/realm-sssd-ipa.c:298
+#, fuzzy
+msgid ""
+"The do-not-touch-config option is not supported when joining an IPA domain."
+msgstr "Ob pridruževanju domeni IPA argument computer-ou ni podprt."
+
+#: service/realm-sssd-ipa.c:466
 msgid "Not currently joined to this realm"
 msgstr "V to polje trenutno niste pridruženi."
 
@@ -459,19 +465,19 @@ msgstr "Pokaži sva zaznana polja"
 msgid "Show only the names"
 msgstr "Pokaži le imena"
 
-#: tools/realm-discover.c:185 tools/realm-join.c:294 tools/realm-leave.c:271
+#: tools/realm-discover.c:185 tools/realm-join.c:296 tools/realm-leave.c:271
 msgid "Use specific client software"
 msgstr "Uporabi posebno odjemalno programsko opremo"
 
-#: tools/realm-discover.c:186 tools/realm-join.c:300
+#: tools/realm-discover.c:186 tools/realm-join.c:302
 msgid "Use specific membership software"
 msgstr "Uporabi posebno člansko programsko opremo"
 
-#: tools/realm-discover.c:187 tools/realm-join.c:310 tools/realm-leave.c:274
+#: tools/realm-discover.c:187 tools/realm-join.c:312 tools/realm-leave.c:274
 msgid "Use specific server software"
 msgstr "Uporabi posebno strežniško programsko opremo"
 
-#: tools/realm-discover.c:188 tools/realm-join.c:316 tools/realm-leave.c:276
+#: tools/realm-discover.c:188 tools/realm-join.c:318 tools/realm-leave.c:276
 msgid "Use ldaps to connect to LDAP"
 msgstr ""
 
@@ -483,65 +489,69 @@ msgstr "Pokaži vsa polja"
 msgid "Couldn't join realm"
 msgstr "Pridružitev v polje je spodletela"
 
-#: tools/realm-join.c:232
+#: tools/realm-join.c:233
 msgid "Cannot join this realm"
 msgstr "Pridružitev v polje ni možna"
 
-#: tools/realm-join.c:234
+#: tools/realm-join.c:235
 msgid "No such realm found"
 msgstr "Takega polja ni mogoče najti"
 
-#: tools/realm-join.c:292
+#: tools/realm-join.c:294
 msgid "Turn off automatic id mapping"
 msgstr ""
 
-#: tools/realm-join.c:296
+#: tools/realm-join.c:298
 #, fuzzy
 msgid "Use specific computer name instead of hostname"
 msgstr "Uporabi posebno odjemalno programsko opremo"
 
-#: tools/realm-join.c:298
+#: tools/realm-join.c:300
 msgid "Computer OU DN to join"
 msgstr "Enolično ime organizacijske enote računalnika za pridružitev"
 
-#: tools/realm-join.c:302
+#: tools/realm-join.c:304
 msgid "Join automatically without a password"
 msgstr "Pridruži se samodejno brez gesla"
 
-#: tools/realm-join.c:304
+#: tools/realm-join.c:306
 msgid "Join using a preset one time password"
 msgstr "Pridruži se z uporabo enkratnega gesla"
 
-#: tools/realm-join.c:306
+#: tools/realm-join.c:308
 #, fuzzy
 msgid "Use specific operation system name"
 msgstr "Uporabi posebno odjemalno programsko opremo"
 
-#: tools/realm-join.c:308
+#: tools/realm-join.c:310
 #, fuzzy
 msgid "Use specific operation system version"
 msgstr "Uporabi posebno strežniško programsko opremo"
 
-#: tools/realm-join.c:312
+#: tools/realm-join.c:314
 msgid "User name to use for enrollment"
 msgstr "Uporabniško ime za vpis"
 
-#: tools/realm-join.c:314
+#: tools/realm-join.c:316
 msgid "Set the user principal for the computer account"
 msgstr "Določite glavnega uporabnika za račun računalnika"
 
-#: tools/realm-join.c:336
+#: tools/realm-join.c:320
+msgid "Do not change client configuration"
+msgstr ""
+
+#: tools/realm-join.c:340
 msgid "Specify one realm to join"
 msgstr "Določi polje za pridružitev"
 
-#: tools/realm-join.c:341
+#: tools/realm-join.c:345
 msgid ""
 "The --no-password argument cannot be used with --one-time-password or --user"
 msgstr ""
 "Argumenta --no-password ni mogoče uporabiti z argumentom --one-time-password "
 "ali --user"
 
-#: tools/realm-join.c:346
+#: tools/realm-join.c:350
 msgid "The --one-time-password argument cannot be used with --user"
 msgstr "Argumenta --one-time-password ni mogoče uporabiti z argumentom --user"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: realmd\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/realmd/realmd/-/issues\n"
-"POT-Creation-Date: 2022-03-16 18:44+0100\n"
+"POT-Creation-Date: 2022-09-28 10:46+0200\n"
 "PO-Revision-Date: 2021-01-22 02:39+0000\n"
 "Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/freedesktop/realmd/"
@@ -95,13 +95,13 @@ msgstr "このシステムの LDAP は UDP 接続をサポートしていませ�
 msgid "Failed to setup LDAP connection"
 msgstr ""
 
-#: service/realm-example.c:82 service/realm-samba.c:270
-#: service/realm-sssd-ad.c:330 service/realm-sssd-ipa.c:300
+#: service/realm-example.c:82 service/realm-samba.c:293
+#: service/realm-sssd-ad.c:362 service/realm-sssd-ipa.c:304
 #, c-format
 msgid "Unsupported or unknown membership software '%s'"
 msgstr "サポートされていない、または不明なメンバーシップソフトウェア '%s'"
 
-#: service/realm-example.c:170 service/realm-samba.c:311
+#: service/realm-example.c:170 service/realm-samba.c:334
 msgid "Already joined to a domain"
 msgstr "すでにドメインに参加済み"
 
@@ -109,8 +109,8 @@ msgstr "すでにドメインに参加済み"
 msgid "Admin name or password is not valid"
 msgstr "管理者名またはパスワードが無効です"
 
-#: service/realm-example.c:242 service/realm-samba.c:452
-#: service/realm-sssd-ad.c:549
+#: service/realm-example.c:242 service/realm-samba.c:475
+#: service/realm-sssd-ad.c:584
 msgid "Not currently joined to this domain"
 msgstr "現在このドメインに参加していません"
 
@@ -184,24 +184,24 @@ msgstr "このレルムへの参加はサポートされていません"
 msgid "Leaving this realm is not supported"
 msgstr "このレルムを離れることはサポートされていません"
 
-#: service/realm-kerberos.c:333 service/realm-kerberos.c:505
+#: service/realm-kerberos.c:333 service/realm-kerberos.c:506
 msgid "Already running another action"
 msgstr "すでに他の操作が実行中"
 
-#: service/realm-kerberos.c:376
+#: service/realm-kerberos.c:377
 #, c-format
 msgid "Already joined to another domain: %s"
 msgstr "すでに別のドメインに参加しています: %s"
 
-#: service/realm-kerberos.c:447
+#: service/realm-kerberos.c:448
 msgid "Failed to change permitted logins. See diagnostics."
 msgstr "許可されたログインの変更に失敗しました。診断を参照してください。"
 
-#: service/realm-kerberos.c:748
+#: service/realm-kerberos.c:749
 msgid "The realm does not allow specifying logins"
 msgstr "レルムではログインを指定できません"
 
-#: service/realm-kerberos.c:756
+#: service/realm-kerberos.c:757
 #, c-format
 msgid "Invalid login argument%s%s%s does not match the login format."
 msgstr "無効なログイン引数 %s %s %s がログイン形式と一致しません。"
@@ -233,11 +233,11 @@ msgstr "必要なパッケージのインストール"
 msgid "Failed to discover realm. See diagnostics."
 msgstr "レルムの検出に失敗しました。診断を参照してください。"
 
-#: service/realm-samba.c:497
+#: service/realm-samba.c:520
 msgid "Not joined to this domain"
 msgstr "このドメインに参加していません"
 
-#: service/realm-samba.c:507 service/realm-samba.c:549
+#: service/realm-samba.c:530 service/realm-samba.c:572
 msgid "The Samba provider cannot restrict permitted logins."
 msgstr "Samba プロバイダーは、許可されたログインを制限できません。"
 
@@ -250,11 +250,11 @@ msgstr "無効なログイン引数 '%s' にサポートされていない文字
 msgid "Enabling SSSD in nsswitch.conf and PAM failed."
 msgstr "nsswitch.conf および PAM で SSSD を有効にできませんでした。"
 
-#: service/realm-sssd-ad.c:249
+#: service/realm-sssd-ad.c:277
 msgid "Unable to automatically join the domain"
 msgstr "ドメインに自動的に参加できません"
 
-#: service/realm-sssd-ad.c:347
+#: service/realm-sssd-ad.c:379
 #, c-format
 msgid ""
 "Joining a domain with a one time password is only supported with the '%s' "
@@ -263,7 +263,7 @@ msgstr ""
 "ワンタイムパスワードでドメインに参加することは、'%s' メンバーシップソフトウェ"
 "アでのみサポートされます"
 
-#: service/realm-sssd-ad.c:361
+#: service/realm-sssd-ad.c:393
 #, c-format
 msgid ""
 "Joining a domain with a user password is only supported with the '%s' "
@@ -272,16 +272,16 @@ msgstr ""
 "ユーザーパスワードを使用してドメインに参加することは、'%s' メンバーシップソフ"
 "トウェアでのみサポートされます"
 
-#: service/realm-sssd-ad.c:377
+#: service/realm-sssd-ad.c:409
 msgid "Unsupported credentials for joining a domain"
 msgstr "ドメインに参加するためのサポートされていない資格情報"
 
-#: service/realm-sssd-ad.c:432 service/realm-sssd-ipa.c:304
-#: tools/realm-join.c:241
+#: service/realm-sssd-ad.c:465 service/realm-sssd-ipa.c:308
+#: tools/realm-join.c:242
 msgid "Already joined to this domain"
 msgstr "すでにこのドメインに参加済み"
 
-#: service/realm-sssd-ad.c:436 service/realm-sssd-ipa.c:308
+#: service/realm-sssd-ad.c:471 service/realm-sssd-ipa.c:312
 msgid "A domain with this name is already configured"
 msgstr "この名前のドメインはすでに設定されています"
 
@@ -299,7 +299,13 @@ msgstr "sssd.conf 設定ファイルにドメイン %s がありません"
 msgid "The computer-ou argument is not supported when joining an IPA domain."
 msgstr "IPA ドメインに参加する場合、computer-ou 引数はサポートされていません。"
 
-#: service/realm-sssd-ipa.c:462
+#: service/realm-sssd-ipa.c:298
+#, fuzzy
+msgid ""
+"The do-not-touch-config option is not supported when joining an IPA domain."
+msgstr "IPA ドメインに参加する場合、computer-ou 引数はサポートされていません。"
+
+#: service/realm-sssd-ipa.c:466
 msgid "Not currently joined to this realm"
 msgstr "現在、このレルムに参加していません"
 
@@ -462,19 +468,19 @@ msgstr "検出されたすべてのレルムを表示"
 msgid "Show only the names"
 msgstr "名前だけ表示"
 
-#: tools/realm-discover.c:185 tools/realm-join.c:294 tools/realm-leave.c:271
+#: tools/realm-discover.c:185 tools/realm-join.c:296 tools/realm-leave.c:271
 msgid "Use specific client software"
 msgstr "特定のクライアントソフトウェアを使用する"
 
-#: tools/realm-discover.c:186 tools/realm-join.c:300
+#: tools/realm-discover.c:186 tools/realm-join.c:302
 msgid "Use specific membership software"
 msgstr "特定のメンバーシップソフトウェアを使用する"
 
-#: tools/realm-discover.c:187 tools/realm-join.c:310 tools/realm-leave.c:274
+#: tools/realm-discover.c:187 tools/realm-join.c:312 tools/realm-leave.c:274
 msgid "Use specific server software"
 msgstr "特定のサーバーソフトウェアを使用する"
 
-#: tools/realm-discover.c:188 tools/realm-join.c:316 tools/realm-leave.c:276
+#: tools/realm-discover.c:188 tools/realm-join.c:318 tools/realm-leave.c:276
 msgid "Use ldaps to connect to LDAP"
 msgstr ""
 
@@ -486,65 +492,69 @@ msgstr "すべてのレルムを表示"
 msgid "Couldn't join realm"
 msgstr "レルムに参加できませんでした"
 
-#: tools/realm-join.c:232
+#: tools/realm-join.c:233
 msgid "Cannot join this realm"
 msgstr "このレルムに参加できません"
 
-#: tools/realm-join.c:234
+#: tools/realm-join.c:235
 msgid "No such realm found"
 msgstr "そのようなレルムは見つかりませんでした"
 
-#: tools/realm-join.c:292
+#: tools/realm-join.c:294
 msgid "Turn off automatic id mapping"
 msgstr "自動 ID マッピングをオフにします"
 
-#: tools/realm-join.c:296
+#: tools/realm-join.c:298
 #, fuzzy
 msgid "Use specific computer name instead of hostname"
 msgstr "特定のクライアントソフトウェアを使用する"
 
-#: tools/realm-join.c:298
+#: tools/realm-join.c:300
 msgid "Computer OU DN to join"
 msgstr "コンピューター OU DN に参加する"
 
-#: tools/realm-join.c:302
+#: tools/realm-join.c:304
 msgid "Join automatically without a password"
 msgstr "パスワードなしで自動的に参加"
 
-#: tools/realm-join.c:304
+#: tools/realm-join.c:306
 msgid "Join using a preset one time password"
 msgstr "プリセットワンタイムパスワードを使用して参加する"
 
-#: tools/realm-join.c:306
+#: tools/realm-join.c:308
 #, fuzzy
 msgid "Use specific operation system name"
 msgstr "特定のクライアントソフトウェアを使用する"
 
-#: tools/realm-join.c:308
+#: tools/realm-join.c:310
 #, fuzzy
 msgid "Use specific operation system version"
 msgstr "特定のサーバーソフトウェアを使用する"
 
-#: tools/realm-join.c:312
+#: tools/realm-join.c:314
 msgid "User name to use for enrollment"
 msgstr "登録に使用するユーザー名"
 
-#: tools/realm-join.c:314
+#: tools/realm-join.c:316
 msgid "Set the user principal for the computer account"
 msgstr "コンピューターアカウントのユーザープリンシパルを設定する"
 
-#: tools/realm-join.c:336
+#: tools/realm-join.c:320
+msgid "Do not change client configuration"
+msgstr ""
+
+#: tools/realm-join.c:340
 msgid "Specify one realm to join"
 msgstr "参加するレルムを1つ指定する"
 
-#: tools/realm-join.c:341
+#: tools/realm-join.c:345
 msgid ""
 "The --no-password argument cannot be used with --one-time-password or --user"
 msgstr ""
 "--no-password 引数は、-one-time-password または --user と一緒に使用することは"
 "できません。"
 
-#: tools/realm-join.c:346
+#: tools/realm-join.c:350
 msgid "The --one-time-password argument cannot be used with --user"
 msgstr "--one-time-password 引数は --user と一緒に使用できません"
 
