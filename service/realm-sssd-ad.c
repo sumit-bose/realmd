@@ -170,12 +170,13 @@ configure_sssd_for_domain (RealmIniConfig *config,
 	GString *realmd_tags;
 	const gchar *access_provider;
 	const gchar *shell;
-    const gchar *explicit_computer_name;
+	const gchar *explicit_computer_name;
 	gchar *authid = NULL;
 	gboolean qualify;
 	gboolean ret;
 	gchar *section;
 	gchar *home;
+	const gchar *ad_server;
 
 	home = realm_sssd_build_default_home (realm_settings_string ("users", "default-home"));
 	qualify = realm_options_qualify_names (disco->domain_name, TRUE);
@@ -195,6 +196,13 @@ configure_sssd_for_domain (RealmIniConfig *config,
 	else if (disco->explicit_netbios)
 		authid = g_strdup_printf ("%s$", disco->explicit_netbios);
 
+	ad_server = disco->explicit_server;
+	if (disco->netlogon_server_name != NULL
+			&& disco->explicit_server != NULL
+			&& g_hostname_is_ip_address (disco->explicit_server)) {
+		ad_server = disco->netlogon_server_name;
+	}
+
 	ret = realm_sssd_config_add_domain (config, disco->domain_name, error,
 	                                    "cache_credentials", "True",
 		                            "use_fully_qualified_names", qualify ? "True" : "False",
@@ -209,7 +217,7 @@ configure_sssd_for_domain (RealmIniConfig *config,
 
 	                                    "fallback_homedir", home,
 	                                    "default_shell", shell,
-	                                    "ad_server", disco->explicit_server,
+	                                    "ad_server", ad_server,
 	                                    "ldap_sasl_authid", authid,
 	                                    NULL);
 

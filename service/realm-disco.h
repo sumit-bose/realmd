@@ -31,6 +31,7 @@ typedef struct {
 	gchar *explicit_netbios;
 	GSocketAddress *server_address;
 	gchar *dns_fqdn;
+	gchar *netlogon_server_name;
 } RealmDisco;
 
 #define        REALM_TYPE_DISCO             (realm_disco_get_type ())

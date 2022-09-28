@@ -182,7 +182,7 @@ parse_netlogon (struct berval **bvs,
 	    !skip_n (&at, end, 16) || /* guid */
 	    !parse_string (beg, end, &at, &unused) || /* forest */
 	    !parse_string (beg, end, &at, &disco->domain_name) ||
-	    !parse_string (beg, end, &at, &unused) || /* hostname */
+	    !parse_string (beg, end, &at, &disco->netlogon_server_name) ||
 	    !parse_string (beg, end, &at, &disco->workgroup) ||
 	    !parse_string (beg, end, &at, &unused) || /* shorthost */
 	    !parse_string (beg, end, &at, &unused) || /* user */
