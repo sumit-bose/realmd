@@ -1,6 +1,6 @@
 AC_PREREQ([2.63])
 
-AC_INIT([realmd], [0.17.0],
+AC_INIT([realmd], [0.17.1],
         [https://gitlab.freedesktop.org/realmd/realmd/-/issues],
         [realmd])
 
