@@ -649,6 +649,40 @@ realm_sssd_ad_generic_finish (RealmKerberosMembership *realm,
 	return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static gchar *get_ad_server_from_config (RealmKerberos *realm)
+{
+	RealmSssd *sssd = REALM_SSSD (realm);
+	RealmIniConfig *config;
+	const gchar *section;
+	gchar **servers;
+	gchar *tmp;
+	size_t c;
+	gchar *value = NULL;
+
+	config = realm_sssd_get_config (sssd);
+	section = realm_sssd_get_config_section (sssd);
+
+	if (section == NULL) {
+		return NULL;
+	}
+
+	servers = realm_ini_config_get_list (config, section, "ad_server", ",");
+	/* Only use the first server defined given in 'ad_server' and ignore
+	 * '_srv_'. */
+	if (servers != NULL) {
+		for (c = 0; servers[c] != NULL; c++) {
+			tmp = g_strstrip (servers[c]);
+			if (strcasecmp ("_srv_", tmp) != 0) {
+				value = g_strdup (tmp);
+				break;
+			}
+		}
+		g_strfreev (servers);
+	}
+
+	return value;
+}
+
 static void
 realm_sssd_ad_discover_myself (RealmKerberos *realm,
                                RealmDisco *disco)
@@ -665,7 +699,7 @@ realm_sssd_ad_discover_myself (RealmKerberos *realm,
 	if (section == NULL)
 		return;
 
-	value = realm_ini_config_get (config, section, "ad_server");
+	value = get_ad_server_from_config (realm);
 	g_free (disco->explicit_server);
 	disco->explicit_server = value;
 
