@@ -266,7 +266,7 @@ fi
 DBUS_SERVICES_DIR="${datadir}/dbus-1/system-services"
 AC_SUBST(DBUS_SERVICES_DIR)
 
-DBUS_POLICY_DIR="${sysconfdir}/dbus-1/system.d"
+DBUS_POLICY_DIR="${datadir}/dbus-1/system.d"
 AC_SUBST(DBUS_POLICY_DIR)
 
 POLKIT_ACTION_DIR="${datadir}/polkit-1/actions"
