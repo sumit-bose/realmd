@@ -110,7 +110,8 @@ default-client = sssd
 		</para>
 
 		<para>Some callers of <command>realmd</command> such as the
-		<link linkend="realm"><command>realm</command></link>
+		<citerefentry><refentrytitle>realm</refentrytitle>
+		<manvolnum>8</manvolnum></citerefentry>
 		command line tool allow specifying which client software should
 		be used. Others, such as GNOME Control Center, simplify choose
 		the default.</para>
