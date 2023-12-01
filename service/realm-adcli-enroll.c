@@ -25,9 +25,10 @@
 #include "realm-settings.h"
 
 static void
-on_join_process (GObject *source,
-                 GAsyncResult *result,
-                 gpointer user_data)
+on_join_leave_process (GObject *source,
+                       GAsyncResult *result,
+                       gpointer user_data,
+                       gboolean is_join)
 {
 	GTask *task = G_TASK (user_data);
 	GError *error = NULL;
@@ -39,15 +40,18 @@ on_join_process (GObject *source,
 		switch (status) {
 		case 2: /* ADCLI_ERR_UNEXPECTED */
 			g_set_error (&error, REALM_ERROR, REALM_ERROR_INTERNAL,
-			             "Internal unexpected error joining the domain");
+			             is_join ? "Internal unexpected error joining the domain"
+			                     : "Internal unexpected error removing host from the domain");
 			break;
 		case 6: /* ADCLI_ERR_CREDENTIALS */
 			g_set_error (&error, REALM_ERROR, REALM_ERROR_AUTH_FAILED,
-			             "Insufficient permissions to join the domain");
+			             is_join ? "Insufficient permissions to join the domain"
+			                     : "Insufficient permissions to remove the host from the domain");
 			break;
 		default:
 			g_set_error (&error, REALM_ERROR, REALM_ERROR_FAILED,
-			             "Failed to join the domain");
+			             is_join ? "Failed to join the domain"
+			                     : "Failed to remove the host from the domain");
 			break;
 		}
 	}
@@ -62,6 +66,22 @@ on_join_process (GObject *source,
 	if (output)
 		g_string_free (output, TRUE);
 	g_object_unref (task);
+}
+
+static void
+on_join_process (GObject *source,
+                 GAsyncResult *result,
+                 gpointer user_data)
+{
+	on_join_leave_process (source, result, user_data, TRUE);
+}
+
+static void
+on_leave_process (GObject *source,
+                  GAsyncResult *result,
+                  gpointer user_data)
+{
+	on_join_leave_process (source, result, user_data, FALSE);
 }
 
 void
@@ -290,7 +310,7 @@ realm_adcli_enroll_delete_async (RealmDisco *disco,
 	g_ptr_array_add (args, NULL);
 
 	realm_command_runv_async ((gchar **)args->pdata, environ, input,
-	                          invocation, on_join_process,
+	                          invocation, on_leave_process,
 	                          g_object_ref (task));
 
 	g_ptr_array_free (args, TRUE);
