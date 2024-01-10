@@ -498,13 +498,16 @@ are_credentials_supported (GVariant *supported,
 	GVariantIter iter;
 	const gchar *type;
 	const gchar *owner;
+	const gchar *list[] = {credential_type_1, credential_type_2, NULL};
+	size_t c;
 
-	g_variant_iter_init (&iter, supported);
-	while (g_variant_iter_loop (&iter, "(&s&s)", &type, &owner)) {
-		if (g_strcmp0 (credential_type_1, type) == 0 ||
-		    g_strcmp0 (credential_type_2, type) == 0) {
-			*ret_owner = owner;
-			return type;
+	for (c = 0; list[c] != NULL; c++) {
+		g_variant_iter_init (&iter, supported);
+		while (g_variant_iter_loop (&iter, "(&s&s)", &type, &owner)) {
+			if (g_strcmp0 (list[c], type) == 0) {
+				*ret_owner = owner;
+				return type;
+			}
 		}
 	}
 
@@ -622,8 +625,6 @@ copy_to_ccache (krb5_context krb5,
 	memset (&mcred, 0, sizeof (mcred));
 	mcred.client = principal;
 	mcred.server = server;
-	mcred.times.starttime = g_get_real_time () / G_TIME_SPAN_MILLISECOND;
-	mcred.times.endtime = mcred.times.starttime;
 
 	code = krb5_cc_retrieve_cred (krb5, def_ccache, KRB5_TC_MATCH_TIMES,
 	                              &mcred, &creds);
@@ -636,6 +637,12 @@ copy_to_ccache (krb5_context krb5,
 		return FALSE;
 	} else if (code != 0) {
 		g_debug ("krb5_cc_retrieve_cred failed: %s", krb5_get_error_message (krb5, code));
+		return FALSE;
+	}
+
+	code = krb5_cc_initialize (krb5, ccache, creds.client);
+	if (code != 0) {
+		g_debug ("krb5_cc_initialize failed: %s", krb5_get_error_message (krb5, code));
 		return FALSE;
 	}
 
