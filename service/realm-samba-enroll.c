@@ -426,6 +426,10 @@ begin_join (GTask *task,
 		                                         upn ? upn : "");
 	}
 
+	if (join->disco->dns_fqdn) {
+		join->join_args[at++] = g_strdup_printf ("dnshostname=%s", join->disco->dns_fqdn);
+	}
+
 	g_assert (at < G_N_ELEMENTS (join->join_args));
 
 	if (error != NULL) {
@@ -439,7 +443,8 @@ begin_join (GTask *task,
 		                   SMBCLI_KERBEROS, "ads", "join", join->disco->domain_name,
 		                   join->join_args[0], join->join_args[1],
 		                   join->join_args[2], join->join_args[3],
-		                   join->join_args[4], NULL);
+		                   join->join_args[4], join->join_args[5],
+		                   NULL);
 
 	/* Do join with a ccache */
 	} else {
@@ -448,7 +453,8 @@ begin_join (GTask *task,
 		                   SMBCLI_KERBEROS, "ads", "join", join->disco->domain_name,
 		                   join->join_args[0], join->join_args[1],
 		                   join->join_args[2], join->join_args[3],
-		                   join->join_args[4], NULL);
+		                   join->join_args[4], join->join_args[5],
+		                   NULL);
 	}
 }
 
