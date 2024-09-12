@@ -24,3 +24,4 @@ ProtectSystem=no
 RestrictRealtime=yes
 RestrictSUIDSGID=yes
 SystemCallArchitectures=native
+CacheDirectory=realmd
