@@ -650,6 +650,7 @@ realm_ini_config_read_file (RealmIniConfig *self,
 
 	if (err != NULL) {
 		g_propagate_error (error, err);
+		g_free (contents);
 		return FALSE;
 	}
 

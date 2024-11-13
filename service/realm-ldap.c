@@ -228,6 +228,7 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 		/* Not an expected failure */
 		if (ls->sock < 0) {
 			g_critical ("couldn't open socket to: %s: %s", addrname, strerror (errno));
+			g_free (addrname);
 			return NULL;
 		}
 
@@ -236,8 +237,10 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 
 		native_len = g_socket_address_get_native_size (address);
 		native = g_malloc (native_len);
-		if (!g_socket_address_to_native (address, native, native_len, NULL))
+		if (!g_socket_address_to_native (address, native, native_len, NULL)) {
+			g_free (addrname);
 			g_return_val_if_reached (NULL);
+		}
 
 		if (connect (ls->sock, native, native_len) < 0 &&
 		    errno != EINPROGRESS) {
@@ -280,6 +283,7 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 		g_free (url);
 
 		g_free (native);
+		g_free (addrname);
 
 		/* Not an expected failure */
 		if (rc != LDAP_SUCCESS) {
@@ -326,6 +330,7 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 
 	case G_SOCKET_PROTOCOL_UDP:
 		url = g_strdup_printf ("cldap://%s:%d", addrname, port);
+		g_free (addrname);
 
 		/*
 		 * HACK: ldap_init_fd() does not work for UDP, otherwise we
@@ -367,11 +372,11 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 		break;
 
 	default:
+		g_free (addrname);
 		g_return_val_if_reached (NULL);
 		break;
 	}
 
-	g_free (addrname);
 
 	version = LDAP_VERSION3;
 	if (ldap_set_option (ls->ldap, LDAP_OPT_PROTOCOL_VERSION, &version) != 0)

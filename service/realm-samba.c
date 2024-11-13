@@ -134,10 +134,9 @@ lookup_login_prefix (RealmSamba *self)
 		return NULL;
 
 	separator = realm_ini_config_get (self->config, REALM_SAMBA_CONFIG_GLOBAL, "winbind separator");
-	if (separator == NULL)
-		separator = g_strdup ("\\");
 
-	return g_strdup_printf ("%s%s", workgroup, separator);
+	return g_strdup_printf ("%s%s", workgroup,
+	                        separator != NULL ? separator : "\\");
 }
 
 typedef struct {

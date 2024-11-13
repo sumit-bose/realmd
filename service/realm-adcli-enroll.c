@@ -226,10 +226,10 @@ realm_adcli_enroll_join_async (RealmDisco *disco,
 
 	if (input)
 		g_bytes_unref (input);
-	free (ccache_arg);
-	free (upn_arg);
-	free (server_arg);
-	free (ou_arg);
+	g_free (ccache_arg);
+	g_free (upn_arg);
+	g_free (server_arg);
+	g_free (ou_arg);
 }
 
 gboolean
@@ -319,7 +319,7 @@ realm_adcli_enroll_delete_async (RealmDisco *disco,
 	if (input)
 		g_bytes_unref (input);
 
-	free (ccache_arg);
+	g_free (ccache_arg);
 	g_free (server_arg);
 }
 

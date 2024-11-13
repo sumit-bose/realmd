@@ -287,8 +287,8 @@ realm_client_new_installer (gboolean verbose,
 	socket = g_socket_new_from_fd (pair[0], &error);
 	if (error != NULL) {
 		realm_handle_error (error, _("Couldn't create socket"));
-		close(pair[0]);
-		close(pair[1]);
+		close (pair[0]);
+		close (pair[1]);
 		return NULL;
 	}
 
@@ -296,11 +296,12 @@ realm_client_new_installer (gboolean verbose,
 	               G_SPAWN_LEAVE_DESCRIPTORS_OPEN | G_SPAWN_DO_NOT_REAP_CHILD,
 	               NULL, NULL, &pid, &error);
 
-	close(pair[1]);
+	close (pair[1]);
 
 	if (error != NULL) {
 		realm_handle_error (error, _("Couldn't run realmd"));
-		close(pair[0]);
+		close (pair[0]);
+		g_object_unref (socket);
 		return NULL;
 	}
 
@@ -770,11 +771,14 @@ build_ccache_credential (const gchar *user_name,
 	if (ccache) {
 		ret = copy_or_kinit_to_ccache (krb5, ccache, user_name, realm_name, error);
 		krb5_cc_close (krb5, ccache);
-		krb5_free_context (krb5);
 	}
+	krb5_free_context (krb5);
 
-	if (!ret)
+	if (!ret) {
+		g_unlink (filename);
+		g_free (filename);
 		return NULL;
+	}
 
 	result = read_file_into_variant (filename);
 

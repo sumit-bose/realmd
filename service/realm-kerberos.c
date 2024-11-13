@@ -300,7 +300,7 @@ join_or_leave (RealmKerberos *self,
 {
 	RealmKerberosMembershipIface *iface = REALM_KERBEROS_MEMBERSHIP_GET_IFACE (self);
 	RealmKerberosMembership *membership = REALM_KERBEROS_MEMBERSHIP (self);
-	RealmCredential *cred;
+	RealmCredential *cred = NULL;
 	MethodClosure *method;
 	GError *error = NULL;
 
@@ -317,6 +317,7 @@ join_or_leave (RealmKerberos *self,
 	cred = realm_credential_parse (credential, &error);
 	if (error != NULL) {
 		g_dbus_method_invocation_return_gerror (invocation, error);
+		realm_credential_unref (cred);
 		g_error_free (error);
 		return;
 	}
@@ -331,6 +332,8 @@ join_or_leave (RealmKerberos *self,
 	if (!realm_invocation_lock_daemon (invocation)) {
 		g_dbus_method_invocation_return_error (invocation, REALM_ERROR, REALM_ERROR_BUSY,
 		                                       _("Already running another action"));
+		realm_credential_unref (cred);
+		g_error_free (error);
 		return;
 	}
 
@@ -1067,7 +1070,7 @@ flush_keytab_entries (krb5_context ctx,
 			count = 0;
 		}
 
-		code = krb5_kt_free_entry (ctx, &entry);
+		code = krb5_free_keytab_entry_contents (ctx, &entry);
 		return_val_if_krb5_failed (ctx, code, FALSE);
 	}
 
@@ -1175,13 +1178,13 @@ realm_kerberos_get_netbios_name_from_keytab (const gchar *realm_name)
 				                && name_data->data[name_data->length - 1] == '$') {
 					netbios_name = g_strndup (name_data->data, name_data->length - 1);
 					if (netbios_name == NULL) {
-						code = krb5_kt_free_entry (ctx, &entry);
+						code = krb5_free_keytab_entry_contents (ctx, &entry);
 						warn_if_krb5_failed (ctx, code);
 						break;
 					}
 				}
 			}
-			code = krb5_kt_free_entry (ctx, &entry);
+			code = krb5_free_keytab_entry_contents (ctx, &entry);
 			warn_if_krb5_failed (ctx, code);
 		}
 	}

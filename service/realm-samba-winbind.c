@@ -154,6 +154,7 @@ realm_samba_winbind_configure_async (RealmIniConfig *config,
 		realm_ini_config_finish_change (config, &error);
 		g_free (idmap_config_backend);
 		g_free (idmap_config_range);
+		g_free (idmap_config_schema_mode);
 	}
 
 	/* Setup pam_winbind.conf with decent defaults matching our expectations */
