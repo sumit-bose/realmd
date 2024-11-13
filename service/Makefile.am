@@ -56,6 +56,7 @@ realmd_SOURCES = \
 	service/realm-kerberos.h \
 	service/realm-kerberos-config.c \
 	service/realm-kerberos-config.h \
+	service/realm-kerberos-helper.c \
 	service/realm-kerberos-membership.c \
 	service/realm-kerberos-membership.h \
 	service/realm-kerberos-provider.c \

@@ -24,6 +24,7 @@
 #include "realm-errors.h"
 #include "realm-invocation.h"
 #include "realm-kerberos.h"
+#include "realm-kerberos-helper.h"
 #include "realm-kerberos-membership.h"
 #include "realm-login-name.h"
 #include "realm-options.h"
@@ -65,21 +66,21 @@ G_DEFINE_TYPE (RealmKerberos, realm_kerberos, G_TYPE_DBUS_OBJECT_SKELETON);
 #define return_if_krb5_failed(ctx, code) G_STMT_START \
 	if G_LIKELY ((code) == 0) { } else { \
 		g_warn_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
-		                krb5_get_error_message ((ctx), (code))); \
+		                realm_krb5_get_error_message ((ctx), (code))); \
 		 return; \
 	} G_STMT_END
 
 #define return_val_if_krb5_failed(ctx, code, val) G_STMT_START \
 	if G_LIKELY ((code) == 0) { } else { \
 		g_warn_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
-		                krb5_get_error_message ((ctx), (code))); \
+		                realm_krb5_get_error_message ((ctx), (code))); \
 		 return (val); \
 	} G_STMT_END
 
 #define warn_if_krb5_failed(ctx, code) G_STMT_START \
 	if G_LIKELY ((code) == 0) { } else { \
 		g_warn_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
-		                krb5_get_error_message ((ctx), (code))); \
+		                realm_krb5_get_error_message ((ctx), (code))); \
 	} G_STMT_END
 
 typedef struct {
@@ -802,7 +803,7 @@ set_krb5_error (GError **error,
 	va_end (va);
 
 	g_set_error (error, REALM_KRB5_ERROR, code,
-	             "%s: %s", string, krb5_get_error_message (context, code));
+	             "%s: %s", string, realm_krb5_get_error_message (context, code));
 	g_free (string);
 }
 

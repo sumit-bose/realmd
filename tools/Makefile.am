@@ -10,6 +10,7 @@ realm_SOURCES = \
 	tools/realm-join.c \
 	tools/realm-leave.c \
 	tools/realm-logins.c \
+	service/realm-kerberos-helper.c \
 	$(NULL)
 
 realm_CFLAGS = \
