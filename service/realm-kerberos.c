@@ -408,6 +408,19 @@ handle_leave (RealmDbusKerberosMembership *membership,
 }
 
 static gboolean
+handle_renew (RealmDbusKerberosMembership *membership,
+               GDBusMethodInvocation *invocation,
+               GVariant *options,
+               gpointer user_data)
+{
+	//RealmKerberos *self = REALM_KERBEROS (user_data);
+
+	g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
+	                                       "Renew is currently not impemented.");
+	return TRUE;
+}
+
+static gboolean
 handle_deconfigure (RealmDbusRealm *realm,
                     GDBusMethodInvocation *invocation,
                     GVariant *options,
@@ -567,6 +580,8 @@ realm_kerberos_constructed (GObject *obj)
 		                  G_CALLBACK (handle_join), self);
 		g_signal_connect (self->pv->membership_iface, "handle-leave",
 		                  G_CALLBACK (handle_leave), self);
+		g_signal_connect (self->pv->membership_iface, "handle-renew",
+		                  G_CALLBACK (handle_renew), self);
 		g_dbus_object_skeleton_add_interface (G_DBUS_OBJECT_SKELETON (self),
 		                                      G_DBUS_INTERFACE_SKELETON (self->pv->membership_iface));
 

@@ -41,6 +41,10 @@ int                   realm_leave                  (RealmClient *client,
                                                     int argc,
                                                     char *argv[]);
 
+int                   realm_renew                  (RealmClient *client,
+                                                    int argc,
+                                                    char *argv[]);
+
 int                   realm_discover               (RealmClient *client,
                                                     int argc,
                                                     char *argv[]);

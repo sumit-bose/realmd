@@ -725,6 +725,15 @@
 			<arg name="options" type="a{sv}" direction="in"/>
 		</method>
 
+		<!--
+		  Renew:
+
+		  Renew the client's credential in the realm.
+		-->
+		<method name="Renew">
+			<arg name="options" type="a{sv}" direction="in"/>
+		</method>
+
 	</interface>
 
 </node>

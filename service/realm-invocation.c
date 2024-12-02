@@ -37,6 +37,7 @@ static InvocationMethod invocation_methods[] = {
 	{ REALM_DBUS_PROVIDER_INTERFACE, "Discover", "org.freedesktop.realmd.discover-realm", 2 },
 	{ REALM_DBUS_KERBEROS_MEMBERSHIP_INTERFACE, "Join", "org.freedesktop.realmd.configure-realm", 2 },
 	{ REALM_DBUS_KERBEROS_MEMBERSHIP_INTERFACE, "Leave", "org.freedesktop.realmd.deconfigure-realm", 2 },
+	{ REALM_DBUS_KERBEROS_MEMBERSHIP_INTERFACE, "Renew", "org.freedesktop.realmd.renew-realm", 1 },
 	{ REALM_DBUS_REALM_INTERFACE, "Deconfigure", "org.freedesktop.realmd.deconfigure-realm", 1 },
 	{ REALM_DBUS_REALM_INTERFACE, "ChangeLoginPolicy", "org.freedesktop.realmd.login-policy", 4 },
 };

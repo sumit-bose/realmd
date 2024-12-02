@@ -40,6 +40,7 @@ struct {
 	{ "discover", realm_discover, "realm discover -v [realm-name]", N_("Discover available realm") },
 	{ "join", realm_join, "realm join -v [-U user] realm-name", N_("Enroll this machine in a realm") },
 	{ "leave", realm_leave, "realm leave -v [-U user] [realm-name]", N_("Unenroll this machine from a realm") },
+	{ "renew", realm_renew, "realm renew -v [realm-name]", N_("Renew credentials for this machine in a realm") },
 	{ "list", realm_list, "realm list", N_("List known realms") },
 	{ "permit", realm_permit, "realm permit [-ax] [-R realm] user ...", N_("Permit user logins") },
 	{ "deny", realm_deny, "realm deny --all [-R realm]", N_("Deny user logins") },

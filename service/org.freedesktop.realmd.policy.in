@@ -44,6 +44,16 @@
 		</defaults>
 	</action>
 
+	<action id="org.freedesktop.realmd.renew-realm">
+		<description>Renew machine creadentials in realm</description>
+		<message>Authentication is required to renew the credentials of this  computer in a realm or domain.</message>
+		<defaults>
+			<allow_any>auth_admin</allow_any>
+			<allow_inactive>auth_admin</allow_inactive>
+			<allow_active>auth_admin_keep</allow_active>
+		</defaults>
+	</action>
+
 	<action id="org.freedesktop.realmd.login-policy">
 		<description>Change login policy</description>
 		<message>Authentication is required to change the policy of who can log in on this computer.</message>
