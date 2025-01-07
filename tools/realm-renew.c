@@ -70,6 +70,10 @@ call_renew (RealmDbusKerberosMembership *membership,
 typedef struct {
 	gchar *membership_software;
 	gboolean use_ldaps;
+	gboolean add_samba_data;
+	gchar *computer_password_lifetime;
+	gchar *host_keytab;
+	gchar *host_fqdn;
 } RealmRenewArgs;
 
 static void
@@ -116,7 +120,11 @@ perform_renew (RealmClient *client,
 	}
 
 	options = realm_build_options (REALM_DBUS_OPTION_MEMBERSHIP_SOFTWARE, args->membership_software,
+	                               REALM_DBUS_OPTION_COMPUTER_PWD_LIFETIME, args->computer_password_lifetime,
+	                               REALM_DBUS_OPTION_HOST_KEYTAB, args->host_keytab,
+	                               REALM_DBUS_OPTION_HOST_FQDN, args->host_fqdn,
 	                               REALM_DBUS_OPTION_USE_LDAPS, args->use_ldaps ? "True" : "False",
+	                               REALM_DBUS_OPTION_ADD_SAMBA_DATA, args->add_samba_data ? "True" : "False",
 	                               NULL);
 	g_variant_ref_sink (options);
 
@@ -138,7 +146,7 @@ realm_renew (RealmClient *client,
 	GOptionContext *context;
 	GError *error = NULL;
 	const gchar *realm_name;
-	RealmRenewArgs args;
+	RealmRenewArgs args = { 0 };
 	GOptionGroup *group;
 	gint ret = 0;
 
@@ -147,6 +155,14 @@ realm_renew (RealmClient *client,
 		  N_("Use specific membership software"), NULL },
 		{ "use-ldaps", 0, 0, G_OPTION_ARG_NONE, &args.use_ldaps,
 		  N_("Use ldaps to connect to LDAP"), NULL },
+		{ "host-keytab", 0, 0, G_OPTION_ARG_STRING, &args.host_keytab,
+		  N_("Path to the keytab"), NULL },
+		{ "host-fqdn", 0, 0, G_OPTION_ARG_STRING, &args.host_fqdn,
+		  N_("Fully-qualified name of the host"), NULL },
+		{ "computer-password-lifetime", 0, 0, G_OPTION_ARG_STRING, &args.computer_password_lifetime,
+		  N_("lifetime of the host accounts password in days"), NULL },
+		{ "add-samba-data", 0, 0, G_OPTION_ARG_NONE, &args.add_samba_data,
+		  N_("Try to update Samba's internal machine account password as well"), NULL },
 		{ NULL, }
 	};
 

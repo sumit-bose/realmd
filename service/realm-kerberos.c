@@ -407,16 +407,57 @@ handle_leave (RealmDbusKerberosMembership *membership,
 	return TRUE;
 }
 
+static void
+on_renew_complete (GObject *source,
+                   GAsyncResult *result,
+                   gpointer user_data)
+{
+	MethodClosure *closure = user_data;
+	RealmKerberosMembershipIface *iface;
+	GCancellable *cancellable;
+	GError *error = NULL;
+
+	iface = REALM_KERBEROS_MEMBERSHIP_GET_IFACE (closure->self);
+	g_return_if_fail (iface->renew_finish != NULL);
+
+	cancellable = realm_invocation_get_cancellable (closure->invocation);
+	if (!g_cancellable_set_error_if_cancelled (cancellable, &error))
+		(iface->leave_finish) (REALM_KERBEROS_MEMBERSHIP (closure->self), result, &error);
+
+	unenroll_method_reply (closure->invocation, error);
+
+	g_clear_error (&error);
+	method_closure_free (closure);
+}
+
 static gboolean
-handle_renew (RealmDbusKerberosMembership *membership,
+handle_renew (RealmDbusKerberosMembership *dbus_membership,
                GDBusMethodInvocation *invocation,
                GVariant *options,
                gpointer user_data)
 {
-	//RealmKerberos *self = REALM_KERBEROS (user_data);
+	MethodClosure *method;
+	RealmKerberos *self = REALM_KERBEROS (user_data);
+	RealmKerberosMembershipIface *iface = REALM_KERBEROS_MEMBERSHIP_GET_IFACE (self);
+	RealmKerberosMembership *membership = REALM_KERBEROS_MEMBERSHIP (self);
 
-	g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
-	                                       "Renew is currently not impemented.");
+	if (!realm_invocation_lock_daemon (invocation)) {
+		g_dbus_method_invocation_return_error (invocation, REALM_ERROR, REALM_ERROR_BUSY,
+		                                       _("Already running another action"));
+		return TRUE;
+	}
+
+	method = method_closure_new (self, invocation);
+
+	if (iface->renew_async == NULL || iface->renew_finish == NULL) {
+		g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+		                                       G_DBUS_ERROR_UNKNOWN_METHOD,
+		                                       "Renew is currently not impemented.");
+		return TRUE;
+	}
+
+	(iface->renew_async) (membership, options, invocation, on_renew_complete, method);
+
 	return TRUE;
 }
 

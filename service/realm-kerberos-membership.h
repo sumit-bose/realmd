@@ -62,6 +62,16 @@ struct _RealmKerberosMembershipIface {
 	                                         GError **error);
 
 	const RealmCredential * (* leave_creds) (RealmKerberosMembership *realm);
+
+	void       (* renew_async)              (RealmKerberosMembership *realm,
+	                                         GVariant *options,
+	                                         GDBusMethodInvocation *invocation,
+	                                         GAsyncReadyCallback callback,
+	                                         gpointer user_data);
+
+	gboolean   (* renew_finish)             (RealmKerberosMembership *realm,
+	                                         GAsyncResult *result,
+	                                         GError **error);
 };
 
 GType               realm_kerberos_membership_get_type        (void) G_GNUC_CONST;

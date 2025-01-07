@@ -644,6 +644,123 @@ realm_sssd_ad_leave_creds (RealmKerberosMembership *membership)
 	return creds;
 }
 
+typedef struct {
+	GDBusMethodInvocation *invocation;
+	gchar *realm_name;
+} RenewClosure;
+
+static void
+renew_closure_free (gpointer data)
+{
+	RenewClosure *renew = data;
+	g_free (renew->realm_name);
+	g_object_unref (renew->invocation);
+	g_free (renew);
+}
+
+static void
+on_renew_done (GObject *source,
+               GAsyncResult *result,
+               gpointer user_data)
+{
+	GTask *task = G_TASK (user_data);
+	RenewClosure *renew = g_task_get_task_data (task);
+	GError *error = NULL;
+
+	if (!g_task_is_valid (result, NULL)) {
+		realm_diagnostics_info (renew->invocation, "Task not valid.");
+	}
+
+	g_task_propagate_boolean (G_TASK (result), &error);
+	if (error != NULL) {
+		realm_diagnostics_error (renew->invocation, error,
+		                         "Task failed with: ");
+		g_error_free (error);
+		g_task_return_error (task, error);
+	} else {
+		g_task_return_boolean (task, TRUE);
+	}
+
+	g_object_unref (task);
+}
+
+static void
+realm_sssd_ad_renew_async (RealmKerberosMembership *membership,
+                           GVariant *options,
+                           GDBusMethodInvocation *invocation,
+                           GAsyncReadyCallback callback,
+                           gpointer user_data)
+{
+	RealmSssdAd *self = REALM_SSSD_AD (membership);
+	RealmKerberos *realm = REALM_KERBEROS (self);
+	RealmSssd *sssd = REALM_SSSD (self);
+	RealmDisco *disco;
+	const gchar *section;
+	GTask *task;
+	RenewClosure *renew;
+	gboolean use_ldaps = FALSE;
+
+	task = g_task_new (self, NULL, callback, user_data);
+
+	/* Check that enrolled in this realm */
+	section = realm_sssd_get_config_section (sssd);
+	if (!section) {
+		g_task_return_new_error (task, REALM_ERROR, REALM_ERROR_NOT_CONFIGURED,
+		                         _("Not currently joined to this domain"));
+		g_object_unref (task);
+		return;
+	}
+
+
+	/* This also has the side-effect of populating the disco info if necessary */
+	disco = realm_kerberos_get_disco (realm);
+
+	renew = g_new0 (RenewClosure, 1);
+	renew->realm_name = g_strdup (realm_kerberos_get_realm_name (realm));
+	renew->invocation = g_object_ref (invocation);
+	g_task_set_task_data (task, renew, renew_closure_free);
+
+	realm_adcli_enroll_renew_async (disco, options, use_ldaps, invocation, on_renew_done,
+	                                g_object_ref (task));
+
+	g_object_unref (task);
+#if 0
+	switch (cred->type) {
+	case REALM_CREDENTIAL_AUTOMATIC:
+		realm_sssd_deconfigure_domain_tail (REALM_SSSD (self), task, invocation);
+		break;
+	case REALM_CREDENTIAL_CCACHE:
+	case REALM_CREDENTIAL_PASSWORD:
+		leave = g_new0 (LeaveClosure, 1);
+		leave->realm_name = g_strdup (realm_kerberos_get_realm_name (realm));
+		leave->invocation = g_object_ref (invocation);
+		leave->use_adcli = strstr (tags ? tags : "", "joined-with-adcli") ? TRUE : FALSE;
+		g_task_set_task_data (task, leave, leave_closure_free);
+
+		use_ldaps = realm_option_use_ldaps (options);
+		if (leave->use_adcli) {
+			realm_adcli_enroll_delete_async (disco, cred, options,
+			                                 use_ldaps,  invocation,
+			                                 on_leave_do_deconfigure, g_object_ref (task));
+		} else {
+			if (use_ldaps) {
+				realm_diagnostics_info (leave->invocation,
+				                        "Membership software does "
+				                        "not support ldaps, trying "
+				                        "without.");
+			}
+			realm_samba_enroll_leave_async (disco, cred, options, invocation,
+			                                on_leave_do_deconfigure, g_object_ref (task));
+		}
+		break;
+	default:
+		g_return_if_reached ();
+	}
+
+	g_object_unref (task);
+#endif
+}
+
 static gboolean
 realm_sssd_ad_generic_finish (RealmKerberosMembership *realm,
                               GAsyncResult *result,
@@ -752,4 +869,7 @@ realm_sssd_ad_kerberos_membership_iface (RealmKerberosMembershipIface *iface)
 	iface->leave_async = realm_sssd_ad_leave_async;
 	iface->leave_finish = realm_sssd_ad_generic_finish;
 	iface->leave_creds = realm_sssd_ad_leave_creds;
+
+	iface->renew_async = realm_sssd_ad_renew_async;
+	iface->renew_finish = realm_sssd_ad_generic_finish;
 }

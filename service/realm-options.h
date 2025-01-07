@@ -52,6 +52,9 @@ gboolean       realm_option_use_ldaps                 (GVariant *options);
 
 gboolean       realm_option_do_not_touch_config       (GVariant *options);
 
+gboolean       realm_option_add_samba_data            (GVariant *options);
+
+const gchar *  realm_option_computer_pwd_lifetime     (GVariant *options);
 G_END_DECLS
 
 #endif /* __REALM_OPTIONS_H__ */

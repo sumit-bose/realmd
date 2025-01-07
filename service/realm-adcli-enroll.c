@@ -23,6 +23,7 @@
 #include "realm-ini-config.h"
 #include "realm-options.h"
 #include "realm-settings.h"
+#include "realm-dbus-constants.h"
 
 static void
 on_join_leave_process (GObject *source,
@@ -78,6 +79,14 @@ on_join_process (GObject *source,
 
 static void
 on_leave_process (GObject *source,
+                  GAsyncResult *result,
+                  gpointer user_data)
+{
+	on_join_leave_process (source, result, user_data, FALSE);
+}
+
+static void
+on_renew_process (GObject *source,
                   GAsyncResult *result,
                   gpointer user_data)
 {
@@ -329,4 +338,98 @@ realm_adcli_enroll_delete_finish (GAsyncResult *result,
 {
 	g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
 	return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+void
+realm_adcli_enroll_renew_async (RealmDisco *disco,
+                                GVariant *options,
+                                gboolean use_ldaps,
+                                GDBusMethodInvocation *invocation,
+                                GAsyncReadyCallback callback,
+                                gpointer user_data)
+{
+	gchar *environ[] = { "LANG=C", NULL };
+	GInetAddress *address;
+	GTask *task;
+	GPtrArray *args;
+	gchar *ccache_arg = NULL;
+	gchar *server_arg = NULL;
+	gboolean add_samba_data = FALSE;
+	const gchar *computer_password_lifetime = NULL;
+	gchar *lifetime_arg = NULL;
+	const gchar *host_keytab = NULL;
+	gchar *keytab_arg = NULL;
+	const gchar *host_fqdn = NULL;
+	gchar *fqdn_arg = NULL;
+
+	g_return_if_fail (disco != NULL);
+	g_return_if_fail (invocation != NULL);
+
+	task = g_task_new (NULL, NULL, callback, user_data);
+	args = g_ptr_array_new ();
+
+	add_samba_data = realm_option_add_samba_data (options);
+	computer_password_lifetime = realm_option_computer_pwd_lifetime (options);
+	host_keytab = realm_options_ad_specific (options,
+	                                         REALM_DBUS_OPTION_HOST_KEYTAB);
+	host_fqdn = realm_options_ad_specific (options,
+	                                       REALM_DBUS_OPTION_HOST_FQDN);
+
+	g_ptr_array_add (args, (gpointer)realm_settings_path ("adcli"));
+	g_ptr_array_add (args, "update");
+	g_ptr_array_add (args, "--verbose");
+	g_ptr_array_add (args, "--domain");
+	g_ptr_array_add (args, (gpointer)disco->domain_name);
+
+	if (use_ldaps) {
+		g_ptr_array_add (args, "--use-ldaps");
+	}
+
+	if (add_samba_data) {
+		g_ptr_array_add (args, "--add-samba-data");
+	}
+
+	if (computer_password_lifetime != NULL) {
+		lifetime_arg = g_strdup_printf ("--computer-password-lifetime=%s",
+		                                computer_password_lifetime);
+		g_ptr_array_add (args, lifetime_arg);
+	}
+
+	if (host_keytab != NULL) {
+		keytab_arg = g_strdup_printf ("--host-keytab=%s", host_keytab);
+		g_ptr_array_add (args, keytab_arg);
+	}
+
+	if (host_fqdn != NULL) {
+		fqdn_arg = g_strdup_printf ("--host-fqdn=%s", host_fqdn);
+		g_ptr_array_add (args, fqdn_arg);
+	}
+
+	if (G_IS_INET_SOCKET_ADDRESS (disco->server_address)) {
+		address = g_inet_socket_address_get_address (G_INET_SOCKET_ADDRESS (disco->server_address));
+		server_arg = g_inet_address_to_string (address);
+		if (server_arg) {
+			g_ptr_array_add (args, "--domain-controller");
+			g_ptr_array_add (args, server_arg);
+		}
+
+	} else if (disco->explicit_server) {
+		g_ptr_array_add (args, "--domain-controller");
+		g_ptr_array_add (args, (gpointer)disco->explicit_server);
+	}
+
+	g_ptr_array_add (args, NULL);
+
+	realm_command_runv_async ((gchar **)args->pdata, environ, NULL,
+	                          invocation, on_renew_process,
+	                          g_object_ref (task));
+
+	g_ptr_array_free (args, TRUE);
+	g_object_unref (task);
+
+	g_free (fqdn_arg);
+	g_free (keytab_arg);
+	g_free (lifetime_arg);
+	g_free (ccache_arg);
+	g_free (server_arg);
 }

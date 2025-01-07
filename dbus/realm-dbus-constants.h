@@ -72,6 +72,10 @@ G_BEGIN_DECLS
 #define   REALM_DBUS_OPTION_LEGACY_SMB_CONF        "legacy-samba-config"
 #define   REALM_DBUS_OPTION_USE_LDAPS              "use-ldaps"
 #define   REALM_DBUS_OPTION_DO_NOT_TOUCH_CONFIG    "do-not-touch-config"
+#define   REALM_DBUS_OPTION_ADD_SAMBA_DATA         "add-samba-data"
+#define   REALM_DBUS_OPTION_COMPUTER_PWD_LIFETIME  "computer-password-lifetime"
+#define   REALM_DBUS_OPTION_HOST_KEYTAB            "host-keytab"
+#define   REALM_DBUS_OPTION_HOST_FQDN              "host-fqdn"
 
 #define   REALM_DBUS_IDENTIFIER_ACTIVE_DIRECTORY   "active-directory"
 #define   REALM_DBUS_IDENTIFIER_WINBIND            "winbind"

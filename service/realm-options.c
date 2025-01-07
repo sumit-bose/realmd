@@ -215,6 +215,42 @@ gboolean realm_option_use_ldaps (GVariant *options)
 	return FALSE;
 }
 
+gboolean realm_option_add_samba_data (GVariant *options)
+{
+	const gchar *add_samba_data_str;
+
+	add_samba_data_str = realm_options_ad_specific (options,
+	                                                REALM_DBUS_OPTION_ADD_SAMBA_DATA);
+	if (add_samba_data_str != NULL
+	            && ( g_ascii_strcasecmp (add_samba_data_str, "True") == 0
+	                || g_ascii_strcasecmp (add_samba_data_str, "Yes") == 0)) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+const gchar *realm_option_computer_pwd_lifetime (GVariant *options)
+{
+	const gchar *computer_password_lifetime;
+	gint64 tmp64;
+	gchar *endptr;
+
+	computer_password_lifetime = realm_options_ad_specific (options,
+	                                                        REALM_DBUS_OPTION_COMPUTER_PWD_LIFETIME);
+	if (computer_password_lifetime != NULL && *computer_password_lifetime != '\0') {
+		errno = 0;
+		tmp64 = g_ascii_strtoll (computer_password_lifetime, &endptr, 10);
+		if (tmp64 < 0 || errno != 0 || *endptr != '\0') {
+			/* Illegal input, ignored, should be checked earlier
+			 * to return an error */
+			computer_password_lifetime = NULL;
+		}
+	}
+
+	return computer_password_lifetime;
+}
+
 gboolean realm_option_do_not_touch_config (GVariant *options)
 {
 	const gchar *str;
