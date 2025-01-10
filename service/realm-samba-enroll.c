@@ -409,11 +409,11 @@ begin_join (GTask *task,
 		}
 	}
 
-	os = realm_options_ad_specific(options, "os-name");
+	os = realm_options_ad_specific(options, REALM_DBUS_OPTION_OS_NAME);
 	if (os != NULL && !g_str_equal (os, ""))
 		join->join_args[at++] = g_strdup_printf ("osName=%s", os);
 
-	os = realm_options_ad_specific(options, "os-version");
+	os = realm_options_ad_specific(options, REALM_DBUS_OPTION_OS_VERSION);
 	if (os != NULL && !g_str_equal (os, ""))
 		join->join_args[at++] = g_strdup_printf ("osVer=%s", os);
 
