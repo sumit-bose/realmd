@@ -447,14 +447,14 @@ handle_renew (RealmDbusKerberosMembership *dbus_membership,
 		return TRUE;
 	}
 
-	method = method_closure_new (self, invocation);
-
 	if (iface->renew_async == NULL || iface->renew_finish == NULL) {
 		g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
 		                                       G_DBUS_ERROR_UNKNOWN_METHOD,
 		                                       "Renew is currently not impemented.");
 		return TRUE;
 	}
+
+	method = method_closure_new (self, invocation);
 
 	(iface->renew_async) (membership, options, invocation, on_renew_complete, method);
 

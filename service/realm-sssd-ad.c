@@ -675,7 +675,6 @@ on_renew_done (GObject *source,
 	if (error != NULL) {
 		realm_diagnostics_error (renew->invocation, error,
 		                         "Task failed with: ");
-		g_error_free (error);
 		g_task_return_error (task, error);
 	} else {
 		g_task_return_boolean (task, TRUE);
