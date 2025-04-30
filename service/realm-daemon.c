@@ -35,6 +35,7 @@
 #include <errno.h>
 
 #ifdef WITH_JOURNAL
+#include <systemd/sd-daemon.h>
 #include <systemd/sd-journal.h>
 #else
 #include <syslog.h>
@@ -445,6 +446,37 @@ on_signal_quit (gpointer data)
 	return FALSE;
 }
 
+static gboolean
+on_signal_reload (gpointer data)
+{
+#ifdef WITH_JOURNAL
+	gchar reload_message[sizeof ("RELOADING=1\nMONOTONIC_USEC=18446744073709551615")];
+	gint64 monotonic_now;
+
+	/* Notify systemd that we are reloading, including a CLOCK_MONOTONIC timestamp in usec
+	 * so that the program is compatible with a Type=notify-reload service. */
+
+	monotonic_now = g_get_monotonic_time ();
+	g_snprintf (reload_message, sizeof (reload_message), "RELOADING=1\nMONOTONIC_USEC=%" G_GINT64_FORMAT, monotonic_now);
+
+	sd_notify (0, reload_message);
+#endif
+
+	g_debug ("Reloading configuration...");
+
+	realm_settings_uninit ();
+	realm_settings_init ();
+
+	g_debug ("Configuration reloaded.");
+
+#ifdef WITH_JOURNAL
+	/* Notify systemd that we have finished reloading. */
+	sd_notify (0, "READY=1\nSTATUS=Processing requests...");
+#endif
+
+	return TRUE;
+}
+
 int
 main (int argc,
       char *argv[])
@@ -546,8 +578,17 @@ main (int argc,
 
 	g_unix_signal_add (SIGINT, on_signal_quit, main_loop);
 	g_unix_signal_add (SIGTERM, on_signal_quit, main_loop);
+	g_unix_signal_add (SIGHUP, on_signal_reload, main_loop);
+
+#ifdef WITH_JOURNAL
+	sd_notify(0, "READY=1\nSTATUS=Processing requests...");
+#endif
 
 	g_main_loop_run (main_loop);
+
+#ifdef WITH_JOURNAL
+	sd_notify(0, "STOPPING=1");
+#endif
 
 	if (service_bus_name_owner_id != 0)
 		g_bus_unown_name (service_bus_name_owner_id);
