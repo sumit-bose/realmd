@@ -20,3 +20,4 @@ tools/realm-discover.c
 tools/realm-join.c
 tools/realm-leave.c
 tools/realm-logins.c
+tools/realm-renew.c
