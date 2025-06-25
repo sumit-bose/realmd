@@ -156,8 +156,6 @@ realm_sssd_config_add_domain (RealmIniConfig *config,
 
 	/* Setup a default sssd section */
 	realm_ini_config_set_list_diff (config, "sssd", "services", ", ", services, NULL);
-	if (!realm_ini_config_have (config, "sssd", "config_file_version"))
-		realm_ini_config_set (config, "sssd", "config_file_version", "2", NULL);
 
 	domains[0] = domain;
 	domains[1] = NULL;
