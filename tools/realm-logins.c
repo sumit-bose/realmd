@@ -198,17 +198,24 @@ realm_permit_or_deny (RealmClient *client,
 	GOptionEntry option_entries[] = {
 		{ "all", 'a', 0, G_OPTION_ARG_NONE, &arg_all,
 		  permit ? N_("Permit any realm account login") : N_("Deny any realm account login"), NULL },
+		{ "realm", 'R', 0, G_OPTION_ARG_STRING, &realm_name, N_("Realm to permit/deny logins for"), NULL },
+		{ NULL, }
+	};
+
+	GOptionEntry option_entries_permit[] = {
 		{ "withdraw", 'x', 0, G_OPTION_ARG_NONE, &arg_withdraw,
 		  N_("Withdraw permit for a realm account to login"), NULL },
 		{ "groups", 'g', 0, G_OPTION_ARG_NONE, &arg_groups,
 		  N_("Treat names as groups which to permit"), NULL },
-		{ "realm", 'R', 0, G_OPTION_ARG_STRING, &realm_name, N_("Realm to permit/deny logins for"), NULL },
 		{ NULL, }
 	};
 
 	context = g_option_context_new ("realm");
 	g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
 	g_option_context_add_main_entries (context, option_entries, NULL);
+	if (permit) {
+		g_option_context_add_main_entries (context, option_entries_permit, NULL);
+	}
 	g_option_context_add_main_entries (context, realm_global_options, NULL);
 
 	if (!g_option_context_parse (context, &argc, &argv, &error)) {
