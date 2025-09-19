@@ -291,15 +291,16 @@ disco_realm_name (RealmClient *client, RealmJoinArgs *args)
 	                                REALM_DBUS_KERBEROS_MEMBERSHIP_INTERFACE,
 	                                NULL, &error);
 
-	if (error != NULL || realms == NULL) {
+	if (error != NULL) {
 		if (realms != NULL) {
 			g_list_free_full (realms, g_object_unref);
 		}
-		if (error != NULL) {
-			realm_handle_error (error, _("Failed to discover realm"));
-		} else {
-			realm_handle_error (NULL, _("No realm found"));
-		}
+		realm_handle_error (error, _("Failed to discover realm"));
+		return NULL;
+	}
+
+	if (realms == NULL) {
+		realm_handle_error (NULL, _("No realm found"));
 		return NULL;
 	}
 
