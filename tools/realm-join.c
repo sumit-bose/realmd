@@ -310,7 +310,7 @@ disco_realm_name (RealmClient *client, RealmJoinArgs *args)
 	return name;
 }
 
-int
+static int
 realm_client_domain_has_fully_qualified_names (RealmClient *client,
                                                const gchar *const input_name,
                                                RealmJoinArgs *args,
@@ -328,7 +328,7 @@ realm_client_domain_has_fully_qualified_names (RealmClient *client,
 	if (input_name == NULL || *input_name == '\0') {
 		tmp_name = disco_realm_name (client, args);
 		if (tmp_name == NULL) {
-			realm_handle_error (NULL, "Failed to discover realm.\n");
+			realm_handle_error (NULL, "Failed to discover realm.");
 			return EIO;
 		}
 		realm_name = tmp_name;
