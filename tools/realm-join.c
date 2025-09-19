@@ -297,8 +297,9 @@ disco_realm_name (RealmClient *client, RealmJoinArgs *args)
 		}
 		if (error != NULL) {
 			realm_handle_error (error, _("Failed to discover realm"));
+		} else {
+			realm_handle_error (NULL, _("No realm found"));
 		}
-		g_clear_error (&error);
 		return NULL;
 	}
 
