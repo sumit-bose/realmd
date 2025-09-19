@@ -358,13 +358,12 @@ realm_client_domain_has_fully_qualified_names (RealmClient *client,
 		/* The first entry in the array is the preferred
 		 * format and "%U" is the placeholder for the short user
 		 * name. */
-		if (formats == NULL || formats[0] == NULL
-		                    || *formats[0] == '\0'
-		                    || strcmp (formats[0], "%U") == 0) {
-			continue;
+		if (formats != NULL && formats[0] != NULL
+		                    && *formats[0] != '\0'
+		                    && strcmp (formats[0], "%U") != 0) {
+			*fully_qualified_names = true;
 		}
 
-		*fully_qualified_names = true;
 		break;
 	}
 
