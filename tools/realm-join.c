@@ -277,6 +277,107 @@ perform_join (RealmClient *client,
 	return ret;
 }
 
+static gchar *
+disco_realm_name (RealmClient *client, RealmJoinArgs *args)
+{
+	RealmDbusKerberosMembership *membership;
+	RealmDbusRealm *realm;
+	GError *error = NULL;
+	GList *realms = NULL;
+	gchar *name = NULL;
+
+	realms = realm_client_discover (client, "", args->use_ldaps, args->client_software,
+	                                args->server_software, args->membership_software,
+	                                REALM_DBUS_KERBEROS_MEMBERSHIP_INTERFACE,
+	                                NULL, &error);
+
+	if (error != NULL) {
+		if (realms != NULL) {
+			g_list_free_full (realms, g_object_unref);
+		}
+		realm_handle_error (error, _("Failed to discover realm"));
+		return NULL;
+	}
+
+	if (realms == NULL) {
+		realm_handle_error (NULL, _("No realm found"));
+		return NULL;
+	}
+
+	membership = realms->data;
+	realm = realm_client_to_realm (client, membership);
+	if (realm != NULL) {
+		name = g_strdup (realm_dbus_realm_get_name (realm));
+		g_object_unref (realm);
+	}
+	g_list_free_full (realms, g_object_unref);
+
+	return name;
+}
+
+static int
+realm_client_domain_has_fully_qualified_names (RealmClient *client,
+                                               const gchar *const input_name,
+                                               RealmJoinArgs *args,
+                                               gboolean *fully_qualified_names)
+{
+	RealmDbusProvider *provider;
+	RealmDbusRealm *realm = NULL;
+	const gchar *const *realms;
+	const gchar *name;
+	size_t c;
+	const gchar *const *formats;
+	const gchar *realm_name;
+	gchar *tmp_name = NULL;
+
+	if (input_name == NULL || *input_name == '\0') {
+		tmp_name = disco_realm_name (client, args);
+		if (tmp_name == NULL) {
+			return ENOENT;
+		}
+		realm_name = tmp_name;
+	} else {
+		realm_name = input_name;
+	}
+
+	provider = realm_client_get_provider (client);
+	realms = realm_dbus_provider_get_realms (provider);
+
+	*fully_qualified_names = false;
+	for (c = 0; realms && realms[c] != NULL; c++) {
+		g_clear_object (&realm);
+		realm = realm_client_get_realm (client, realms[c]);
+		if (realm == NULL || !realm_is_configured (realm)) {
+			continue;
+		}
+
+		name = realm_dbus_realm_get_name (realm);
+		if (name == NULL || strcasecmp (name, realm_name) != 0) {
+			continue;
+		}
+
+		formats = realm_dbus_realm_get_login_formats (realm);
+		/* The first entry in the array is the preferred
+		 * format and "%U" is the placeholder for the short user
+		 * name. */
+		if (formats != NULL && formats[0] != NULL
+		                    && *formats[0] != '\0'
+		                    && strcmp (formats[0], "%U") != 0) {
+			*fully_qualified_names = true;
+		}
+
+		break;
+	}
+
+	g_free (tmp_name);
+	g_clear_object (&realm);
+	if (realms == NULL || realms[c] == NULL) {
+		return ENOENT;
+	}
+
+	return 0;
+}
+
 int
 realm_join (RealmClient *client,
             int argc,
@@ -288,6 +389,7 @@ realm_join (RealmClient *client,
 	RealmJoinArgs args;
 	GOptionGroup *group;
 	gint ret = 0;
+	gboolean has_fqn = false;
 
 	GOptionEntry option_entries[] = {
 		{ "automatic-id-mapping", 0, G_OPTION_FLAG_OPTIONAL_ARG, G_OPTION_ARG_CALLBACK,
@@ -353,6 +455,30 @@ realm_join (RealmClient *client,
 	} else {
 		realm_name = argc < 2 ? "" : argv[1];
 		ret = perform_join (client, realm_name, &args);
+	}
+
+	if (ret == 0 && !realm_unattended) {
+		g_print ("Join is successful!\n");
+		if (realm_client_domain_has_fully_qualified_names (client, realm_name, &args, &has_fqn) != 0) {
+			g_printerr ("%s: %s\n", g_get_prgname (),
+			            _("Cannot determine if fully-qualified name are used or not"));
+		} else {
+			if (has_fqn) {
+				g_print (
+				    _("Please note that by default, you have to use fully-qualified names\n"
+				    "during AD user lookup & login instead of just short names\n"
+				    "e.g. 'username@domain' instead of just 'username'. Although\n"
+				    "fully-qualified names are recommended, this behaviour can be changed\n"
+				    "in sssd.conf file with the 'use_fully_qualified_names = False' option.\n"));
+			} else {
+				g_print (
+				    _("Please note that by default, you can use short names during AD user\n"
+				    "lookup & login instead of fully-qualified names\n"
+				    "e.g. 'username' instead of 'username@domain'. If you prefer\n"
+				    "fully-qualified names, this behaviour can be changed\n"
+				    "in sssd.conf file with the 'use_fully_qualified_names = True' option.\n"));
+			}
+		}
 	}
 
 	g_option_context_free (context);
