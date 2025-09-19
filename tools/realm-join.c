@@ -331,7 +331,7 @@ realm_client_domain_has_fully_qualified_names (RealmClient *client,
 	if (input_name == NULL || *input_name == '\0') {
 		tmp_name = disco_realm_name (client, args);
 		if (tmp_name == NULL) {
-			return EIO;
+			return ENOENT;
 		}
 		realm_name = tmp_name;
 	} else {
