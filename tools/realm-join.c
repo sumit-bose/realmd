@@ -295,6 +295,9 @@ disco_realm_name (RealmClient *client, RealmJoinArgs *args)
 		if (realms != NULL) {
 			g_list_free_full (realms, g_object_unref);
 		}
+		if (error != NULL) {
+			realm_handle_error (error, _("Failed to discover realm"));
+		}
 		g_clear_error (&error);
 		return NULL;
 	}
