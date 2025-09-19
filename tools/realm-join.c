@@ -328,7 +328,6 @@ realm_client_domain_has_fully_qualified_names (RealmClient *client,
 	if (input_name == NULL || *input_name == '\0') {
 		tmp_name = disco_realm_name (client, args);
 		if (tmp_name == NULL) {
-			realm_handle_error (NULL, "Failed to discover realm.");
 			return EIO;
 		}
 		realm_name = tmp_name;
@@ -341,9 +340,7 @@ realm_client_domain_has_fully_qualified_names (RealmClient *client,
 
 	*fully_qualified_names = false;
 	for (c = 0; realms && realms[c] != NULL; c++) {
-		if (realm != NULL) {
-			g_object_unref (realm);
-		}
+		g_clear_object (&realm);
 		realm = realm_client_get_realm (client, realms[c]);
 		if (realm == NULL || !realm_is_configured (realm)) {
 			continue;
@@ -369,9 +366,7 @@ realm_client_domain_has_fully_qualified_names (RealmClient *client,
 	}
 
 	g_free (tmp_name);
-	if (realm != NULL) {
-		g_object_unref (realm);
-	}
+	g_clear_object (&realm);
 	if (realms == NULL || realms[c] == NULL) {
 		return ENOENT;
 	}
