@@ -277,6 +277,12 @@ begin_net_process (JoinClosure *join,
 		g_ptr_array_add (args, join->disco->explicit_server);
 	}
 
+	/* Add debug level when daemon is running in debug mode */
+	if (realm_daemon_has_debug_flag ()) {
+		g_ptr_array_add (args, "-d");
+		g_ptr_array_add (args, "10");
+	}
+
 	va_start (va, user_data);
 	do {
 		arg = va_arg (va, gchar *);
