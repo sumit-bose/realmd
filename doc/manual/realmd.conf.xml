@@ -206,6 +206,23 @@ os-version = 9.9.9.9.9
 	<variablelist>
 
 	<varlistentry>
+	<term><option>debug</option></term>
+	<listitem>
+		<para>Set this to <parameter>yes</parameter> to enable verbose
+		debug logging in realmd.</para>
+		<para>The default setting for this is <parameter>no</parameter>.</para>
+
+		<informalexample>
+<programlisting language="js">
+[service]
+debug = no
+# debug = yes
+</programlisting>
+		</informalexample>
+	</listitem>
+	</varlistentry>
+
+	<varlistentry>
 	<term><option>automatic-install</option></term>
 	<listitem>
 		<para>Set this to <parameter>no</parameter> to disable automatic
