@@ -210,12 +210,13 @@ os-version = 9.9.9.9.9
 	<listitem>
 		<para>Set this to <parameter>no</parameter> to disable automatic
 		installation of packages via package-kit.</para>
+		<para>The default setting for this is <parameter>yes</parameter>.</para>
 
 		<informalexample>
 <programlisting language="js">
 [service]
-automatic-install = no
-# automatic-install = yes
+automatic-install = yes
+# automatic-install = no
 </programlisting>
 		</informalexample>
 	</listitem>
@@ -227,6 +228,7 @@ automatic-install = no
 		<para>Set this to <parameter>yes</parameter> to create a Samba
 		configuration file with id-mapping options used by Samba-3.5
 		and earlier version.</para>
+		<para>The default setting for this is <parameter>no</parameter>.</para>
 
 		<informalexample>
 <programlisting language="js">
