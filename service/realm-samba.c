@@ -728,6 +728,13 @@ realm_samba_discover_myself (RealmKerberos *realm,
 	disco->explicit_netbios = value;
 
 	value = realm_ini_config_get (self->config, REALM_SAMBA_CONFIG_GLOBAL, "password server");
+	/* Only set explicit_server to the value of 'password server' if it
+	 * neither contains the wildcard character '*' nor a list separator
+	 * character used by Samba. */
+	if (value != NULL && strpbrk (value, "* \t,;") != NULL) {
+		g_free (value);
+		value = NULL;
+	}
 	g_free (disco->explicit_server);
 	disco->explicit_server = value;
 }
