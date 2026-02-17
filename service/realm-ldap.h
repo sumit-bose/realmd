@@ -37,6 +37,8 @@ typedef GIOCondition (* RealmLdapCallback)     (LDAP *ldap,
 
 GSource *     realm_ldap_connect_anonymous     (GSocketAddress *address,
                                                 GSocketProtocol protocol,
+                                                const gchar *explicit_server,
+                                                const gchar *server_name,
                                                 gboolean use_ldaps,
                                                 GCancellable *cancellable);
 

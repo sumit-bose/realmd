@@ -31,6 +31,7 @@ typedef struct {
 	gchar *name;
 	GQueue addresses;
 	GQueue targets;
+	GHashTable *addr_host_map;
 	gint current_port;
 	gboolean use_ldaps;
 	gint returned;
@@ -58,6 +59,8 @@ realm_disco_dns_init (RealmDiscoDns *self)
 {
 	g_queue_init (&self->addresses);
 	g_queue_init (&self->targets);
+	self->addr_host_map = g_hash_table_new_full (g_str_hash, g_str_equal,
+	                                             g_free, g_free);
 }
 
 static void
@@ -84,6 +87,8 @@ realm_disco_dns_finalize (GObject *obj)
 		g_srv_target_free (value);
 	}
 
+	g_hash_table_destroy (self->addr_host_map);
+
 	G_OBJECT_CLASS (realm_disco_dns_parent_class)->finalize (obj);
 }
 
@@ -96,16 +101,24 @@ realm_disco_dns_next (GSocketAddressEnumerator *enumerator,
 	g_return_val_if_reached (NULL);
 }
 
+struct resolve_user_data {
+	gchar *current_host;
+	gint current_port;
+	GTask *task;
+};
+
 static void
 on_name_resolved (GObject *source,
                   GAsyncResult *result,
                   gpointer user_data)
 {
-	GTask *task = G_TASK (user_data);
+	struct resolve_user_data *ud = (struct resolve_user_data *) user_data;
+	GTask *task = ud->task;
 	RealmDiscoDns *self = g_task_get_source_object (task);
 	GError *error = NULL;
 	GList *addrs;
 	GList *l;
+	gchar *addr_str;
 
 	addrs = g_resolver_lookup_by_name_finish (self->resolver, result, &error);
 
@@ -118,12 +131,19 @@ on_name_resolved (GObject *source,
 		g_clear_error (&error);
 
 	if (error) {
+		g_free (ud->current_host);
+		g_free (ud);
 		g_task_return_error (task, error);
-
 	} else {
-		for (l = addrs; l != NULL; l = g_list_next (l))
-			g_queue_push_head (&self->addresses, g_inet_socket_address_new (l->data, self->current_port));
+		for (l = addrs; l != NULL; l = g_list_next (l)) {
+			addr_str = g_inet_address_to_string (l->data);
+			g_debug ("resolved %s: %s", ud->current_host, addr_str);
+			g_queue_push_head (&self->addresses, g_inet_socket_address_new (l->data, ud->current_port));
+			g_hash_table_replace (self->addr_host_map, addr_str, g_strdup (ud->current_host));
+		}
 		g_list_free_full (addrs, g_object_unref);
+		g_free (ud->current_host);
+		g_free (ud);
 		return_or_resolve (self, task);
 	}
 
@@ -165,12 +185,27 @@ on_service_resolved (GObject *source,
 	g_object_unref (task);
 }
 
+static struct resolve_user_data *get_user_data (gboolean use_ldaps,
+                                                const gchar *hostname,
+                                                int port, GTask *task)
+{
+	struct resolve_user_data *user_data = NULL;
+
+	user_data = g_new (struct resolve_user_data, 1);
+	user_data->current_port = use_ldaps ? 636 : port;
+	user_data->current_host = g_strdup (hostname);
+	user_data->task = g_object_ref (task);
+
+	return user_data;
+}
+
 static void
 return_or_resolve (RealmDiscoDns *self,
                    GTask *task)
 {
 	GSocketAddress *address;
 	GSrvTarget *target;
+	struct resolve_user_data *user_data = NULL;
 
 	address = g_queue_pop_head (&self->addresses);
 	if (address) {
@@ -181,10 +216,12 @@ return_or_resolve (RealmDiscoDns *self,
 
 	target = g_queue_pop_head (&self->targets);
 	if (target) {
-		self->current_port = self->use_ldaps ? 636 : g_srv_target_get_port (target);
+		user_data = get_user_data (self->use_ldaps,
+		                           g_srv_target_get_hostname (target),
+		                           g_srv_target_get_port (target), task);
 		g_resolver_lookup_by_name_async (self->resolver, g_srv_target_get_hostname (target),
 		                                 g_task_get_cancellable (task), on_name_resolved,
-		                                 g_object_ref (task));
+		                                 user_data);
 		g_srv_target_free (target);
 		return;
 	}
@@ -199,9 +236,10 @@ return_or_resolve (RealmDiscoDns *self,
 		break;
 	case PHASE_SRV:
 		realm_diagnostics_info (self->invocation, "Resolving: %s", self->name);
+		user_data = get_user_data (self->use_ldaps, self->name, 389, task);
 		g_resolver_lookup_by_name_async (self->resolver, self->name,
 		                                 g_task_get_cancellable (task), on_name_resolved,
-		                                 g_object_ref (task));
+		                                 user_data);
 		self->current_port = self->use_ldaps ? 636 : 389;
 		self->phase = PHASE_HOST;
 		break;
@@ -299,4 +337,13 @@ realm_disco_dns_get_name (GSocketAddressEnumerator *enumerator)
 {
 	g_return_val_if_fail (REALM_IS_DISCO_DNS (enumerator), NULL);
 	return REALM_DISCO_DNS (enumerator)->name;
+}
+
+const gchar *
+realm_disco_dns_get_host_for_addr (GSocketAddressEnumerator *enumerator,
+                                   const gchar *key)
+{
+	g_return_val_if_fail (REALM_IS_DISCO_DNS (enumerator), NULL);
+
+	return (const gchar *) g_hash_table_lookup (REALM_DISCO_DNS (enumerator)->addr_host_map, key);
 }

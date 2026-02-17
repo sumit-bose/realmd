@@ -185,6 +185,8 @@ int ldap_init_fd (ber_socket_t fd, int proto, LDAP_CONST char *url, struct ldap 
 GSource *
 realm_ldap_connect_anonymous (GSocketAddress *address,
                               GSocketProtocol protocol,
+                              const gchar *explicit_server,
+                              const gchar *server_name,
                               gboolean use_ldaps,
                               GCancellable *cancellable)
 {
@@ -202,7 +204,6 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 	gchar *url;
 	int rc;
 	int opt_rc;
-	int ldap_opt_val;
 	const char *errmsg = NULL;
 	struct timeval tv = {LDAP_SOCKET_TIMEOUT, 0};
 	unsigned int milli = LDAP_SOCKET_TIMEOUT * 1000;
@@ -268,7 +269,15 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 			g_warning ("couldn't set TCP_USER_TIMEOUT");
 		}
 
-		if (family == G_SOCKET_FAMILY_IPV4) {
+		if (explicit_server != NULL) {
+			url = g_strdup_printf ("%s://%s:%d",
+			                       use_ldaps ? "ldaps" : "ldap",
+			                       explicit_server, port);
+		} else if (server_name != NULL) {
+			url = g_strdup_printf ("%s://%s:%d",
+			                       use_ldaps ? "ldaps" : "ldap",
+			                       server_name, port);
+		} else if (family == G_SOCKET_FAMILY_IPV4) {
 			url = g_strdup_printf ("%s://%s:%d",
 			                       use_ldaps ? "ldaps" : "ldap",
 			                       addrname, port);
@@ -279,6 +288,8 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 		} else {
 			url = NULL;
 		}
+		g_debug ("Connection to url %s.", url != NULL ? url
+		                                                : "- not available -");
 		rc = ldap_init_fd (ls->sock, 1, url, &ls->ldap);
 		g_free (url);
 
@@ -292,26 +303,7 @@ realm_ldap_connect_anonymous (GSocketAddress *address,
 		}
 
 		if (use_ldaps) {
-			/* Since we currently use the IP address in the URI
-			 * the certificate check might fail because in most
-			 * cases the IP address won't be listed in the SANs of
-			 * the LDAP server certificate. We will try to
-			 * continue in this case and not fail. */
-			ldap_opt_val = LDAP_OPT_X_TLS_ALLOW;
-			rc = ldap_set_option (ls->ldap,
-			                       LDAP_OPT_X_TLS_REQUIRE_CERT,
-			                       &ldap_opt_val);
-			if (rc != LDAP_OPT_SUCCESS) {
-				g_debug ("Failed to disable certificate checking, trying without");
-			}
-
-			ldap_opt_val = 0;
-			rc = ldap_set_option (ls->ldap, LDAP_OPT_X_TLS_NEWCTX,
-			                       &ldap_opt_val);
-			if (rc != LDAP_OPT_SUCCESS) {
-				g_debug ("Failed to refresh LDAP context for TLS, trying without");
-			}
-
+			/* We rely on the TLS related settings in ldap.conf. */
 			rc = ldap_install_tls (ls->ldap);
 			if (rc != LDAP_SUCCESS) {
 				opt_rc = ldap_get_option (ls->ldap,
