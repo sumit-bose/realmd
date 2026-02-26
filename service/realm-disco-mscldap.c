@@ -52,8 +52,10 @@ closure_free (gpointer data)
 		g_source_remove (clo->fever_id);
 	if (clo->normal_id)
 		g_source_remove (clo->normal_id);
-	g_source_destroy (clo->source);
-	g_source_unref (clo->source);
+	if (clo->source != NULL) {
+		g_source_destroy (clo->source);
+		g_source_unref (clo->source);
+	}
 	g_free (clo);
 }
 

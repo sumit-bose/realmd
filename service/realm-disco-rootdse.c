@@ -53,8 +53,10 @@ closure_free (gpointer data)
 
 	ldap_memfree (clo->default_naming_context);
 
-	g_source_destroy (clo->source);
-	g_source_unref (clo->source);
+	if (clo->source != NULL) {
+		g_source_destroy (clo->source);
+		g_source_unref (clo->source);
+	}
 	g_clear_object (&clo->invocation);
 	realm_disco_unref (clo->disco);
 	g_free (clo);
