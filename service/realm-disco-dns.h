@@ -33,6 +33,9 @@ RealmDiscoDnsHint           realm_disco_dns_get_hint             (GSocketAddress
 
 const gchar *               realm_disco_dns_get_name             (GSocketAddressEnumerator *enumerator);
 
+const gchar *               realm_disco_dns_get_host_for_addr    (GSocketAddressEnumerator *enumerator,
+                                                                  const gchar *key);
+
 G_END_DECLS
 
 #endif /* __REALM_DISCO_DNS_H__ */

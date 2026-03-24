@@ -154,6 +154,20 @@ domain.example.com
 	is blocked by a firewall and only the LDAPS port (636/tcp) is
 	available.</para>
 
+	<para>With respect to the validation of the TLS
+	certificates of the LDAP server <command>realmd</command>
+	relies on the settings in
+	<citerefentry><refentrytitle>ldap.conf</refentrytitle>
+	<manvolnum>5</manvolnum></citerefentry>. If
+	<command>realmd</command> fails to connect to the LDAPS
+	port because of a failed certificate validation
+	<citerefentry><refentrytitle>ldap.conf</refentrytitle>
+	<manvolnum>5</manvolnum></citerefentry> can be modified
+	to change the settings system wide or suitable
+	environment variables can be added in the
+	<command>realmd</command> start script or service file.
+	</para>
+
 	<para>If this option is set to <parameter>yes</parameter>
 	<command>realmd</command> will use the ldaps port when reading the
 	rootDSE and call the <command>adcli</command> membership software with

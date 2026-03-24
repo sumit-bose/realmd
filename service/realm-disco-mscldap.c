@@ -52,8 +52,10 @@ closure_free (gpointer data)
 		g_source_remove (clo->fever_id);
 	if (clo->normal_id)
 		g_source_remove (clo->normal_id);
-	g_source_destroy (clo->source);
-	g_source_unref (clo->source);
+	if (clo->source != NULL) {
+		g_source_destroy (clo->source);
+		g_source_unref (clo->source);
+	}
 	g_free (clo);
 }
 
@@ -348,7 +350,8 @@ realm_disco_mscldap_async (GSocketAddress *address,
 		return;
 	}
 
-	clo->source = realm_ldap_connect_anonymous (address, protocol, FALSE, cancellable);
+	clo->source = realm_ldap_connect_anonymous (address, protocol, NULL,
+	                                            NULL, FALSE, cancellable);
 	if (clo->source == NULL) {
 		g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_CONNECTED,
 		                         _("Failed to setup LDAP connection"));

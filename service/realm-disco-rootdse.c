@@ -53,8 +53,10 @@ closure_free (gpointer data)
 
 	ldap_memfree (clo->default_naming_context);
 
-	g_source_destroy (clo->source);
-	g_source_unref (clo->source);
+	if (clo->source != NULL) {
+		g_source_destroy (clo->source);
+		g_source_unref (clo->source);
+	}
 	g_clear_object (&clo->invocation);
 	realm_disco_unref (clo->disco);
 	g_free (clo);
@@ -275,27 +277,11 @@ request_domain_info (GTask *task,
 {
 	const char *attrs[] = { "info", "associatedDomain", NULL };
 	int ret;
-	int ldap_opt_val;
 
 	clo->request = NULL;
 	clo->result = result_domain_info;
 
-	/* Trying to setup a TLS tunnel in the case the IPA server requires an
-	 * encrypted connected. Trying without in case of an error. Since we
-	 * most probably do not have the IPA CA certificate we will not check
-	 * the server certificate. */
-	ldap_opt_val = LDAP_OPT_X_TLS_NEVER;
-	ret = ldap_set_option (ldap, LDAP_OPT_X_TLS_REQUIRE_CERT, &ldap_opt_val);
-	if (ret != LDAP_OPT_SUCCESS) {
-		g_debug ("Failed to disable certificate checking, trying without");
-	}
-
-	ldap_opt_val = 0;
-	ret = ldap_set_option (ldap, LDAP_OPT_X_TLS_NEWCTX, &ldap_opt_val);
-	if (ret != LDAP_OPT_SUCCESS) {
-		g_debug ("Failed to refresh LDAP context for TLS, trying without");
-	}
-
+	/* We rely on the TLS related settings in ldap.conf. */
 	ret = ldap_start_tls_s (ldap, NULL, NULL);
 	if (ret != LDAP_SUCCESS) {
 		g_debug ("Failed to setup TLS tunnel, trying without");
@@ -510,6 +496,7 @@ on_ldap_io (LDAP *ldap,
 void
 realm_disco_rootdse_async (GSocketAddress *address,
                            const gchar *explicit_server,
+                           const gchar *server_name,
                            gboolean use_ldaps,
                            GDBusMethodInvocation *invocation,
                            GCancellable *cancellable,
@@ -532,6 +519,7 @@ realm_disco_rootdse_async (GSocketAddress *address,
 	g_task_set_task_data (task, clo, closure_free);
 
 	clo->source = realm_ldap_connect_anonymous (address, G_SOCKET_PROTOCOL_TCP,
+	                                            explicit_server, server_name,
 	                                            use_ldaps, cancellable);
 	if (clo->source == NULL) {
 		g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_CONNECTED,

@@ -182,6 +182,7 @@ on_discover_next_address (GObject *source,
 	const gchar *explicit_host;
 	RealmDiscoDnsHint hint;
 	gchar *string;
+	const gchar *server_name;
 
 	if (self->completed) {
 		g_object_unref (self);
@@ -205,8 +206,11 @@ on_discover_next_address (GObject *source,
 		else
 			explicit_host = NULL;
 
-		realm_diagnostics_info (self->invocation, "Performing LDAP DSE lookup on: %s", string);
+		server_name = realm_disco_dns_get_host_for_addr (enumerator, string);
+		realm_diagnostics_info (self->invocation, "Performing LDAP DSE lookup on: %s %s %s",
+		                                          string, explicit_host, server_name);
 		realm_disco_rootdse_async (address, explicit_host,
+		                           server_name,
 		                           self->use_ldaps,
 		                           self->invocation, self->cancellable,
 		                           on_discover_rootdse, g_object_ref (self));
